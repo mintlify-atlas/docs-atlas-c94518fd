@@ -1,7 +1,7 @@
 ---
-title: "Protocol Selection Map: Choose by Failure Mode"
+title: "Protocol Map: Find the Right Contract by Failure Mode"
 sidebarTitle: "Protocol Map"
-description: "Match your situation to the right AI Protocol Kit contract. Organized by what can go wrong: ambiguity, wrong output, evidence loss, publication errors, or session drift."
+description: "Choose the right AI Protocol Kit contract by failure mode. Six lanes cover ambiguity, wrong output, evidence loss, publication errors, and session drift."
 ---
 
 This map is organized by failure mode, not by protocol name. Each lane describes a class of situation — what tends to go wrong, and why — and lists the protocols that address it. If you already know the failure mode you are trying to prevent, find that lane and use the protocol it points to. If you are not sure, scan the lane descriptions and pick the one that most closely matches what you are actually worried about in this specific task.
@@ -49,7 +49,7 @@ This map is organized by failure mode, not by protocol name. Each lane describes
       </Card>
     </CardGroup>
   </Tab>
-  <Tab title="Reasoning & Constraints">
+  <Tab title="Reasoning, Constraints & System Reading">
     Use these protocols when the problem is not just unclear but structurally prone to collapse — where AI might resolve a real tension with a false compromise, oversimplify a constraint conflict, or default to the most plausible-sounding answer rather than the most defensible one. These protocols require the AI to expand the problem space, surface competing interpretations, and hold conflicting constraints in view before producing output.
 
     <CardGroup cols={2}>
@@ -64,7 +64,7 @@ This map is organized by failure mode, not by protocol name. Each lane describes
       </Card>
     </CardGroup>
   </Tab>
-  <Tab title="GitHub & Publishing">
+  <Tab title="GitHub / Public Repo & Page Publishing">
     Use these protocols when the work touches GitHub repositories, README files, GitHub Pages, public project pages, discovery files, badges, or any publication step that is difficult to reverse. The failure modes here are publication without review, incorrect metadata, broken discovery files, and badges or counters added without a real purpose. These protocols add explicit confirmation gates before any commit, push, deploy, or public-facing change.
 
     <CardGroup cols={2}>
@@ -98,16 +98,13 @@ This map is organized by failure mode, not by protocol name. Each lane describes
       <Card title="Triad AI Orchestration Protocol" href="/protocols/triad-ai-orchestration" icon="triangle">
         Run a review loop between an executing AI and a reviewing AI over snapshots, repo state, or diffs while preserving target authority.
       </Card>
-      <Card title="PHI-Lens Protocol" href="/protocols/phi-lens" icon="eye">
-        Handle non-trivial tasks where constraints interact and a flat compromise would hide the dominant force, counterforce, or asymmetry.
-      </Card>
     </CardGroup>
   </Tab>
 </Tabs>
 
 ## About protocol overlap
 
-Some protocols appear in more than one lane. System Reading Protocol appears under both "Shape the Work" and "Review Findings & Evidence." Pre-Task Expansion appears under both "Shape the Work" and "Reasoning & Constraints." PHI-Lens appears under both "Reasoning & Constraints" and "Govern Agentic Sessions."
+Some protocols appear in more than one lane. System Reading Protocol appears under both "Shape the Work" and "Review Findings & Evidence." Pre-Task Expansion appears under both "Shape the Work" and "Reasoning, Constraints & System Reading." PHI-Lens appears under both "Reasoning, Constraints & System Reading" and "Shape the Work" contexts when constraint interaction is the dominant risk.
 
 This is intentional, not a mistake. These protocols are genuinely useful in more than one failure-mode context — they can play different roles depending on what the task needs. Seeing a protocol in two lanes does not mean you should load both lanes at once. It means the protocol is versatile, and your situation determines which lane's framing is most relevant. Pick the lane that describes your actual failure risk, use the protocol it recommends, and do not stack unless you have a specific reason documented in the [How to Use](/how-to-use) guide.
 

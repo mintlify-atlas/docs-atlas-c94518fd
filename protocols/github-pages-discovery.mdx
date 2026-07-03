@@ -1,7 +1,7 @@
 ---
-title: "GitHub Pages Discovery Set Protocol v1"
+title: "GitHub Pages Discovery Set Protocol v1 — Path Safety"
 sidebarTitle: "Pages Discovery"
-description: "Generate machine-readable discovery files for GitHub Pages sites — only after deployment root, site type, and canonical URLs are fully classified and closed."
+description: "Generate machine-readable discovery files for GitHub Pages — only after deployment root, site type, and canonical URLs are fully classified and closed."
 ---
 
 The GitHub Pages Discovery Set Protocol v1 is a working contract for building the machine-readable discovery layer on top of a GitHub Pages artifact. It provides infrastructure that helps crawlers, bots, LLM readers, and external systems understand what has been published — without competing with the human-facing page. Use it after a GitHub Pages deployment has been committed to, once the owner, repository, deployment type, and canonical URLs are known.
@@ -42,7 +42,7 @@ Before generating any discovery files, all required variables must be closed. If
     `DOMAIN_ROOT` usually equals `SITE_ROOT`. Root-relative discovery paths may be valid only when `DOMAIN_ROOT` and `SITE_ROOT` are the same.
 
     **Example variables:**
-    ```
+    ```text
     OWNER = example-user
     REPO  = example-user.github.io
     SITE_ROOT  = https://example-user.github.io/
@@ -61,7 +61,7 @@ Before generating any discovery files, all required variables must be closed. If
     </Warning>
 
     **Example variables:**
-    ```
+    ```text
     OWNER = example-user
     REPO  = example-project
     SITE_ROOT  = https://example-user.github.io/example-project/
@@ -74,7 +74,7 @@ Before generating any discovery files, all required variables must be closed. If
     `SITE_ROOT` depends on the configured custom domain and path. Do not assume `OWNER.github.io` path behaviour when a custom domain is active. Do not assume the custom domain is domain-root unless confirmed.
 
     **Example variables:**
-    ```
+    ```text
     CUSTOM_DOMAIN = example.com
     SITE_ROOT  = https://example.com/
     DISCOVERY_ROOT = https://example.com/

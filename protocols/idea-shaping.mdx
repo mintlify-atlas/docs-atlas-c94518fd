@@ -141,6 +141,12 @@ The protocol defines six behaviors that are required during shaping — not opti
   If a runtime, file, source, or executor can validate something mechanically, prefer that over model inference. Use abstract tool classes only when necessary: files, sources, web, runtime, code executor, artifacts. Do not over-specify host-specific behavior unless the operator explicitly asks for it.
 </Accordion>
 
+<Accordion title="Avoid overdesign">
+  Do not create extra files, extra sections, extra states, extra abstractions, or extra conventions unless they remove a real ambiguity or solve a real failure mode.
+
+  "Could be useful later" is not enough.
+</Accordion>
+
 ## Provenance Labeling in Practice
 
 During shaping, every non-trivial element gets one of three labels. This is how the AI communicates what is grounded versus what it has introduced.
