@@ -1,0 +1,287 @@
+---
+title: "GitHub Badge, Telemetry & Counter Protocol v1.2.3"
+sidebarTitle: "Badge & Telemetry"
+description: "Decide which badges, counters, analytics, and validation signals are actually justified for a GitHub repo — using explicit decision states to prevent vanity infrastructure."
+---
+
+The GitHub Badge, Telemetry & Counter Protocol v1.2.3 is a decision protocol for signal layers on GitHub repositories and GitHub Pages. A signal layer is one of: a badge, a counter, a telemetry or analytics tag, a validation script, a verification workflow, an external signal service, or a traffic and observability review. Use this protocol before adding or modifying any of these layers — to ensure each signal has a genuine job rather than serving as decoration or implied maturity signalling.
+
+## Core Principle
+
+<Note>
+Signals are not decoration. A signal is justified only when it improves understanding, verification, observability, maintenance, reuse confidence, or operational decision-making. Do not add a signal to make a repository look more mature than it is. Do not create infrastructure only to justify a badge. Do not measure a surface before its relevant integrity is closed.
+</Note>
+
+## What This Protocol Governs
+
+This protocol evaluates signal layers only. It reads repository, licence, release, workflow, Page, and metadata state as evidence.
+
+**This protocol must NOT create or govern:**
+
+| Out of scope | Why |
+|---|---|
+| Publication packages | Governed by the Repository Publication protocol |
+| Licensing choices | Out of protocol scope |
+| Repository identity or settings | Not a signal layer |
+| Discovery files | Governed by discovery protocols |
+| Citation infrastructure | Out of protocol scope |
+| Funding or support setup | Out of protocol scope |
+| Release or changelog strategy | Out of protocol scope |
+
+## Decision States
+
+Every evaluated signal receives exactly one decision state.
+
+| State | Definition |
+|-------|-----------|
+| `APPLY` | Use now — evidence and prerequisites are satisfied. |
+| `SKIP` | Do not use — the signal is not justified. |
+| `DEFER` | May become valid after a concrete, known trigger. |
+| `BLOCKED_INTEGRITY` | Cannot decide — the relevant surface has not passed the required validation gate. |
+| `BLOCKED_PAGE_STATE` | Cannot decide — a Page-dependent signal lacks required Page evidence. |
+| `BLOCKED_EXTERNAL_SERVICE` | Cannot decide — external service behaviour, privacy, dependency, or purpose is unresolved. |
+| `BLOCKED_SIGNAL_EVIDENCE` | Cannot decide — the gate is not the problem, but a specific backing fact required by the signal is missing. |
+
+### DEFER Output Requirement
+
+For every `DEFER` decision, the output must include all four of:
+
+1. **Unblock trigger** — the concrete event that would allow re-evaluation
+2. **Owner** — who is responsible for the trigger, if known
+3. **Required evidence after trigger** — what must be verifiable once the trigger fires
+4. **Signal to re-evaluate** — which signal this DEFER applies to
+
+### BLOCKED vs DEFER
+
+<Warning>
+BLOCKED is not a softer DEFER. If no concrete trigger exists, use SKIP or a BLOCKED state — not DEFER. BLOCKED means a prerequisite condition is absent and cannot be assumed away.
+</Warning>
+
+**Blocked state disambiguation**
+
+| State | Use when |
+|-------|---------|
+| `BLOCKED_INTEGRITY` | The relevant surface has not passed the required validation gate. |
+| `BLOCKED_SIGNAL_EVIDENCE` | The gate is not the problem — a specific backing fact for the signal is missing. |
+| `BLOCKED_PAGE_STATE` | Page existence, URL, deployment state, or insertion surface blocks a Page-dependent signal. |
+| `BLOCKED_EXTERNAL_SERVICE` | External service behaviour, privacy, dependency, or purpose is unresolved. |
+
+**Examples**
+
+| Scenario | Correct state |
+|----------|--------------|
+| Licence badge requested; licence file or recognition state is unknown | `BLOCKED_SIGNAL_EVIDENCE` |
+| Workflow badge requested; workflow existence or status is unknown | `BLOCKED_SIGNAL_EVIDENCE` |
+| Workflow exists but has not passed the required run | `BLOCKED_INTEGRITY` |
+| Page analytics requested; Page URL is unknown | `BLOCKED_PAGE_STATE` |
+| Analytics service privacy behaviour is unknown | `BLOCKED_EXTERNAL_SERVICE` |
+
+## Phases
+
+<Steps>
+
+### Phase 1 — Classify Signal Context
+
+Determine only what affects signal choice: repository name, repository type, primary published unit, primary reader, signal purpose, existing README, existing licence state, existing release or tag state, existing scripts, workflows, badges, counters, analytics, external signal services, GitHub Page state (only if a requested signal depends on a Page), maintenance model, and observability need.
+
+**Supported repository types**
+
+| Type | Description |
+|------|-------------|
+| `PROFILE_HUB` | Personal or organisation profile repository |
+| `PROTOCOL_REPO` | AI protocol, contract, or behavioural spec repository |
+| `KIT_DOCS_REPO` | Kit, documentation, or guide repository |
+| `TECHNICAL_REPO` | Code, library, tool, or application repository |
+| `STATIC_PAGE_REPO` | Repository whose primary output is a static page |
+| `CONTENT_REPO` | Written, media, or mixed content repository |
+| `ARCHIVE_REPO` | Archived or inactive repository |
+| `INTERNAL_OPERATIONAL_REPO` | Internal tooling or operational scripts |
+| `HYBRID_REPO` | More than one type in meaningful proportion |
+
+<Note>
+Do not recommend repository settings, description, topics, homepage, social preview, or repository features from this phase.
+</Note>
+
+### Phase 2 — Detect Existing Signals
+
+Inspect enough evidence to classify existing signals:
+
+| Layer | Classification options |
+|-------|----------------------|
+| Badges | none / semantic / dynamic / service / stale / unknown |
+| Counters | none / README hit counter / profile counter / service counter / unknown |
+| Telemetry | none / Page analytics / product analytics / unknown / misplaced |
+| Validation scripts | none / local script / package script / custom validator / unknown |
+| Verification workflows | none / existing workflow / passing workflow / failing workflow / unknown |
+| External services | none / badge service / analytics service / counter service / status service / unknown |
+| Traffic review source | GitHub-native / external / none / unknown |
+
+If a signal exists but its backing evidence does not, mark it stale or invalid and report it under **Existing Signal Cleanup**.
+
+<Info>
+GitHub Traffic review is operator-facing by default. It must not be exposed as a public signal unless explicitly exported by the operator. Stars, forks, and watchers are public counters — not GitHub Traffic review.
+</Info>
+
+**Existing Signal Cleanup**
+
+For each stale, invalid, misleading, or unsupported existing signal, output: signal, current target, problem, missing or invalid backing evidence, minimum action (remove / replace / block until evidence exists), and risk if left unchanged.
+
+### Phase 3 — Integrity Gate
+
+Before recommending public badges, counters, analytics, external services, or public status signals, close the relevant integrity gate.
+
+Integrity passes only when one of these is true:
+- The check was executed successfully.
+- A passing result is available from reliable evidence.
+- An existing workflow covers the relevant surface and passes.
+- The operator explicitly provides a passing result.
+
+**Allowed while integrity is blocked**
+- Recommend a validation script
+- Recommend a verification workflow
+- Recommend an exact check command
+- Recommend removal of a stale or unsupported existing signal
+
+**Not allowed while integrity is blocked**
+- Public badge, counter, analytics, external public signal, or public status signal
+
+### Phase 4 — Page Signal Gate
+
+Activate only if at least one requested signal depends on a GitHub Page, or the operator explicitly asks to evaluate Page-dependent signals.
+
+**Allowed Page-dependent signals:** Page analytics, Page hit counter, Page availability badge, uptime badge, external Page telemetry.
+
+**Not in scope for this gate:** discovery files, canonical URLs, Open Graph, sitemap, robots, `llms.txt`, `raw-manifest.json`, footer discovery links.
+
+### Phase 5 — Evaluate Signal Families
+
+Evaluate only the families relevant to the requested signals:
+
+1. Semantic badges
+2. Dynamic GitHub badges
+3. Service badges
+4. README or profile counters
+5. Page analytics or telemetry
+6. Validation scripts
+7. Verification workflows
+8. Workflow or status badges
+9. External signal services
+10. GitHub Traffic or observability review
+11. Signal-tied reporting
+
+</Steps>
+
+## What Makes a Signal Justified vs Unjustified
+
+<CardGroup cols={2}>
+  <Card title="Justified signals" icon="circle-check">
+    - Status badge backed by real project state
+    - Licence badge when the licence file exists and is recognised
+    - Workflow badge after the workflow exists and passes at least once
+    - Release badge when a release or tag exists
+    - Page analytics when a Page exists and the data informs a maintenance decision
+    - Validation script when a real repeated integrity check is needed
+  </Card>
+  <Card title="Unjustified signals" icon="circle-xmark">
+    - Fake build or package badge
+    - Coverage badge without coverage evidence
+    - Release badge without any release or tag
+    - Badge wall (badges added for appearance)
+    - Maturity-signalling badge unsupported by project state
+    - Counter with no maintenance or decision use attached
+    - Analytics on a Page surface whose privacy implications are unresolved
+  </Card>
+</CardGroup>
+
+## Semantic Badge Vocabulary
+
+Use controlled semantic badge values unless the operator explicitly approves a new one. Do not create synonyms when an existing value works.
+
+<Tabs>
+  <Tab title="STATUS">
+    `experimental` · `active` · `stable` · `maintained` · `archived` · `deprecated`
+  </Tab>
+  <Tab title="TYPE">
+    `profile_hub` · `ai_protocol` · `skill_system` · `docs_kit` · `technical_tool` · `static_page` · `operational_system` · `content_repo` · `archive` · `hybrid`
+  </Tab>
+  <Tab title="USE">
+    `read` · `load_in_ai` · `copy` · `adapt` · `run` · `deploy` · `reference` · `package`
+  </Tab>
+  <Tab title="SCOPE">
+    `personal` · `public` · `reusable` · `internal` · `experimental`
+  </Tab>
+</Tabs>
+
+## Signal-Only Presets
+
+Presets guide signal selection only. They must not recommend repository settings, publication work, discovery files, citation infrastructure, funding, or release strategy.
+
+<Accordion title="PROFILE_HUB">
+- Profile counter: optional
+- Profile/status semantic badge: conditional
+- GitHub Traffic review: optional/internal
+- Stats widgets: usually SKIP
+- Project badge wall: SKIP
+</Accordion>
+
+<Accordion title="PROTOCOL_REPO">
+- Semantic badges: status / type / use
+- Dynamic badges: licence if licence state is known
+- GitHub Traffic review: optional/internal
+- Validation script or workflow: conditional if real check surface exists
+- Workflow badge: only if real workflow exists and passes
+- Release/version/download badge: only if release/tag/artefact evidence exists
+- Page analytics: only if Page signal gate passes
+</Accordion>
+
+<Accordion title="KIT_DOCS_REPO">
+- Semantic badges: status / type
+- Dynamic badges: licence if licence state is known
+- Integrity workflow: conditional if docs/links/check surface exists
+- Counters: optional
+- GitHub Traffic review: optional/internal
+- Page analytics: only if Page signal gate passes
+</Accordion>
+
+<Accordion title="TECHNICAL_REPO">
+- Validation script or workflow: core if real check surface exists
+- Workflow badge: only after passing workflow
+- Release/download badge: only if artefacts exist
+- Service/package badge: only if backing service/package exists
+- README hit counter: usually SKIP
+</Accordion>
+
+<Accordion title="STATIC_PAGE_REPO">
+- Page analytics: conditional if Page signal gate passes and a maintenance decision exists
+- Uptime/Page availability badge: conditional after Page state and external service gate pass
+- Deployment workflow badge: only if workflow evidence exists
+- Badge wall on page: SKIP
+</Accordion>
+
+<Accordion title="ARCHIVE_REPO">
+- Archive/status badge: conditional
+- Active status badge: SKIP
+- Analytics/counters: SKIP unless a real review decision exists
+- Workflow badge: SKIP unless integrity still matters
+</Accordion>
+
+<Accordion title="HYBRID_REPO">
+For hybrid repositories: identify component types, choose one PRIMARY preset, choose SECONDARY presets only for signal families they actually justify, resolve public signal conflicts by choosing the smaller public signal surface.
+
+The output must state: PRIMARY_PRESET, SECONDARY_PRESETS, INCLUDED_SIGNAL_FAMILIES, EXCLUDED_SIGNAL_FAMILIES, and conflict decisions.
+</Accordion>
+
+## Output Structure
+
+The protocol produces a signal decision table:
+
+| Signal | Decision | Why | Target | Evidence | Prerequisite | Unblock trigger | Risk |
+|--------|----------|-----|--------|----------|--------------|-----------------|------|
+
+Followed by sections for: Applied signals, Deferred signals, Skipped signals, Blocked signals, Signal cleanup, Evidence read, Integrity gate, Page signal gate (if relevant), External service gate (if relevant), and Next minimum action.
+
+## Final Rule
+
+<Note>
+A signal is correct only when it has a job. If it does not improve understanding, verification, observability, maintenance, reuse confidence, or operational decision-making — skip it. If evidence is missing — block it. If the trigger is known but not yet satisfied — defer it with the trigger. If it is decorative — reject it.
+</Note>

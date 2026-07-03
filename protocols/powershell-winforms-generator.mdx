@@ -1,0 +1,224 @@
+---
+title: "PowerShell WinForms App Generator Protocol v1"
+sidebarTitle: "WinForms Generator"
+description: "A tiered behavioral contract for AI agents generating or refactoring PowerShell WinForms desktop apps — covering UI thread safety, layout, DPI, accessibility, and verification."
+---
+
+The PowerShell WinForms App Generator Protocol v1 is a behavior contract for AI agents producing or refactoring PowerShell + WinForms desktop applications. Its purpose is to produce operational desktop UIs that are responsive, readable, maintainable, and safe to use under real work. This is not end-user documentation — it is an AI-only operational document that sets non-negotiable constraints, structural defaults, and verification requirements before any code is produced or declared complete.
+
+<Warning>
+  This protocol is addressed to **AI agents**, not to developers directly. If you are using this protocol, paste it into your AI context before requesting generation or refactoring of a WinForms application.
+</Warning>
+
+---
+
+## Priority Tiers
+
+The protocol does not apply a flat hierarchy. When context, time, or output length is constrained, degradation follows a fixed order — never the reverse.
+
+<CardGroup cols={2}>
+  <Card title="Tier A — Non-Negotiable" icon="triangle-exclamation">
+    Violation causes a crash, a frozen UI, or a wrong-environment launch. **Sections 0, 2, 3, 5, 6, 7.** These are never bypassed or deferred.
+  </Card>
+  <Card title="Safety / Integrity — Always Binding" icon="shield">
+    Rules about secrets, destructive actions, privilege elevation, unsupported environments, and test truthfulness are binding regardless of tier. If they cannot be satisfied, stop or ask for user confirmation.
+  </Card>
+  <Card title="Tier B — Structural" icon="layer-group">
+    Binding; deviation requires an explicit stated reason in the output. **Sections 1, 4, 8, 9, 10, 11, 12, 13 core DPI/readability/accessibility baseline, 14, 15, 18.**
+  </Card>
+  <Card title="Tier C — Polish" icon="paintbrush">
+    Best effort. Extended accessibility polish in Section 13 when the runtime or environment cannot support implementation or verification. Skipped items must be stated explicitly.
+  </Card>
+</CardGroup>
+
+<Note>
+  **Process sections are always active.** Sections 16, 17, 19, and 20 govern verification, acceptance, rejection, and final output even when lower-tier implementation details are skipped. If two rules from different tiers conflict, the lower tier yields and the conflict is stated in the output — never silently resolved.
+</Note>
+
+---
+
+## Section 0 — Target Runtime Matrix
+
+Before generating any code, the agent must declare the exact target environment. The app must fail early with a clear message if the host cannot display a Windows desktop UI.
+
+Required declarations:
+
+- **Platform:** Windows desktop interactive session only
+- **Shell version:** Windows PowerShell 5.1, PowerShell 7+, or both
+- **Backing runtime:** .NET Framework or modern .NET
+- **Architecture:** x64/x86 requirement when COM, native binaries, registry views, ODBC/OLEDB, or shell integration are involved
+- **Required modules** and minimum versions
+- **Supported launch command**
+- **Unsupported contexts:** Linux, macOS, WSL, SSH remoting, WinRM, noninteractive scheduled task, headless CI — unless explicitly handled as static/test-only mode
+
+<Warning>
+  No code may be generated before the target runtime matrix is declared. Assumptions about the runtime are not permitted.
+</Warning>
+
+---
+
+## Section 1 — Default Stack
+
+Use native PowerShell + WinForms by default. Do not introduce third-party UI libraries unless the user explicitly asks for them and accepts the dependency cost.
+
+**Minimum baseline — always present:**
+
+```powershell
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
+[System.Windows.Forms.Application]::EnableVisualStyles()
+```
+
+---
+
+## Section 2 — Host and Message Pump
+
+Single-threaded apartment (STA) hosting and a proper message pump are Tier A requirements. Violation causes frozen or unresponsive UI.
+
+<Steps>
+  <Step title="Use a single UI owner thread">
+    All controls are created on the UI thread. No exceptions.
+  </Step>
+  <Step title="Start with STA">
+    Start UI entrypoints with `powershell.exe -STA`, `pwsh.exe -STA`, or an equivalent STA host. Fail early or show a clear warning if the current host is not STA.
+  </Step>
+  <Step title="Use Application.Run()">
+    Use `Application.Run($form)` or an `ApplicationContext`-equivalent owner pattern as the main loop. Do not use `ShowDialog()` as the normal main-loop strategy unless the tool is explicitly modal and short-lived.
+  </Step>
+  <Step title="Respect startup timing">
+    Do not start background workers from the form constructor. Start workers only after the form handle exists — preferably in `Shown` or `Load`, or after the message pump has started.
+  </Step>
+  <Step title="Handle shutdown correctly">
+    On shutdown, set a closing flag before disposing controls so late callbacks are ignored. If the visible UI process owns the form, do not launch that process hidden.
+  </Step>
+</Steps>
+
+---
+
+## Section 3 — Hard Constraints
+
+This is the single source of truth for hard constraints. These constraints are referenced by Sections 16 and 19 and are not restated there. A constraint is not weaker because it only appears here.
+
+- Treat WinForms as event-driven desktop software, not as a quick form script
+- Keep the UI thread responsive
+- Do not perform slow work directly inside click handlers or timer handlers
+- Do not update controls from worker threads without marshaling back to the UI thread
+- Do not build the main UI with fixed coordinates
+- Do not hide operation status, progress, or errors
+- `Application.DoEvents()` may be used only for tiny UI-state flushes — never to mask long synchronous work or as the normal responsiveness strategy
+- Do not use `System.Windows.Forms.Timer`, or any timer type, as a background worker for slow work
+- Do not append unbounded text/log output directly to a control — cap, batch, or page it
+- Do not start workers before the form handle exists
+- Do not leave timers running or disposed-of controls referenced after form closing
+- **Do not state that a check, test, or scan was performed if it was not actually executed in this session.** If a check was skipped, asserted from reading the code, or not possible in the current environment, label it explicitly as such — never as "verified"
+- Prefer stable, boring, operational UI over decorative UI
+
+---
+
+## Section 4 — Layout Rules
+
+<Tabs>
+  <Tab title="Required layout containers">
+    | Container | Use case |
+    |---|---|
+    | `TableLayoutPanel` | Main shell and major regions |
+    | `FlowLayoutPanel` | Command bars, filters, status badges, button groups |
+    | `SplitContainer` | Adjustable main/detail or content/log regions |
+
+    Use `Dock` and `Anchor` deliberately. Set a fixed minimum window size.
+  </Tab>
+  <Tab title="Avoid">
+    - Deeply nested layout trees
+    - Rebuilding layout during resize
+    - Expensive refresh during resize
+    - Fixed-coordinate-only forms
+    - Oversized command areas that force scrolling
+  </Tab>
+  <Tab title="Recommended shapes">
+    **Operational dashboard:**
+    ```text
+    Top command/status area     small fixed height
+    Main content area           70–80%
+    Log/status console          20–30%
+    ```
+
+    **Two-pane content:**
+    ```text
+    Summary/actions/details     38%
+    Main output/list/log        62%
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## Section 5 — Responsiveness and Dispatcher
+
+An acceptable UI must remain movable, clickable where safe, repaintable, and visibly alive during work. For any operation that can take noticeable time:
+
+<Steps>
+  <Step title="Validate immediately">
+    Validate inputs before starting work. Do not begin an operation on invalid state.
+  </Step>
+  <Step title="Show a running/loading state">
+    The user must see that work is in progress. Do not leave the UI in an ambiguous state.
+  </Step>
+  <Step title="Disable only conflicting controls">
+    Disable only controls that would conflict with the operation — not the entire UI.
+  </Step>
+  <Step title="Run work off the UI thread">
+    Run the work outside the UI thread or keep the synchronous section very short.
+  </Step>
+  <Step title="Report progress">
+    Report progress or current step where practical. Write to an app console or log.
+  </Step>
+  <Step title="Restore in finally">
+    Restore controls and cursor state in a `finally` block — always, regardless of success or failure.
+  </Step>
+</Steps>
+
+Create exactly one UI-safe dispatcher/helper, then route all worker-to-UI updates through it. The helper must ignore updates after shutdown begins, ignore disposed or disposing controls, avoid forcing handle creation from a worker thread, marshal through `BeginInvoke` / `Invoke` only after the handle exists, and be the only allowed path for worker-to-UI updates.
+
+<Note>
+  Use `Control.InvokeAsync` only when the declared target runtime supports it. Do not recommend it generically for Windows PowerShell 5.1 / .NET Framework targets.
+</Note>
+
+---
+
+## Key Safety Rules
+
+<Warning>
+  **Never state that a check was performed if it was not.** If a check was skipped, asserted from reading the code, or not possible in the current environment, it must be labeled explicitly as such — never as "verified." This is a Safety / Integrity rule and is binding regardless of tier.
+</Warning>
+
+Privileged and destructive action rules — never bypass silently:
+
+- Do not request elevation unless the specific action requires it
+- Detect missing privileges and explain the required permission; never silently self-elevate
+- Destructive actions must expose target, scope, consequence, and confirmation
+- Prefer dry-run / preview for delete, overwrite, stop service, kill process, registry, ACL, network, or bulk file actions
+- Logs must record destructive action intent and result without leaking secrets
+
+---
+
+## When to Use This Protocol vs. General AI Coding Assistance
+
+<Tabs>
+  <Tab title="Use this protocol when">
+    - You need an AI to generate a maintainable, responsive, production-ready WinForms application
+    - The app involves background work, status logging, progress feedback, or destructive operations
+    - You need the AI to declare its runtime assumptions, verify them, and produce auditable output
+    - You need explicit verification and acceptance checklists rather than a quick script
+    - The app will be used in a real work environment where frozen UI or silent failures are not acceptable
+  </Tab>
+  <Tab title="Use general coding assistance when">
+    - You need a quick throwaway script with a minimal UI
+    - The task does not involve background work, external commands, or stateful operations
+    - You are prototyping and plan to apply the protocol later before production use
+    - The scope is narrow enough that the overhead of a full behavioral contract exceeds the task value
+  </Tab>
+</Tabs>
+
+<Tip>
+  PowerShell + WinForms is well-suited for operational tools, dashboards, admin consoles, and internal utilities. If the app requires multi-window navigation, complex state, heavy data binding, plugin architecture, installer/updater, enterprise accessibility, or long-term product maintenance, the agent must flag the complexity and propose alternatives — including a compiled C# WinForms shell, WPF/WinUI, or a web-based dashboard.
+</Tip>

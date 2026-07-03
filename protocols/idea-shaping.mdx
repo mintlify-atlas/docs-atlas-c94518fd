@@ -1,0 +1,204 @@
+---
+title: "Idea Shaping Protocol v1: Structure Before Synthesis"
+sidebarTitle: "Idea Shaping"
+description: "Use Idea Shaping Protocol v1 when your task is fuzzy, overloaded, or premature — it forces constraint identification before any artifact is produced."
+---
+
+Idea Shaping Protocol v1 is a behavioral contract that prevents AI from synthesizing too early. When an idea is still raw — aesthetic, vague, or overloaded — AI defaults to improvisation: generating specs, proposing architectures, and producing artifacts before the underlying structure is stable. This protocol forces a different sequence: reverse-engineer the idea first, identify what is actually non-negotiable, shape the form until it is structurally legible, and only then produce anything. The protocol is not a brainstorming tool. It is a constraint-driven shaping engine.
+
+## What It Is and When to Use It
+
+The failure mode this protocol prevents is **premature synthesis**: AI producing polished output from an unresolved input. Left unconstrained, AI will improvise architecture from aesthetic cues, answer the easy version of the problem, and lock in decisions before the real constraints are known. By the time the output looks good, the structure underneath may be wrong.
+
+Use Idea Shaping Protocol v1 when:
+
+- The idea is still fuzzy, vague, or not yet mechanically defined
+- The problem has multiple possible interpretations and none have been tested
+- The task feels "ready" but critical constraints (runtime, persistence, success criteria) haven't been closed
+- You want to avoid being handed a well-formatted artifact for the wrong system
+
+<Warning>
+  Do not load this protocol when the shape is already stable and you just need a document written. That is a job for DRAFTING / SYNTHESIS MODE — or for a protocol that governs artifact production directly.
+</Warning>
+
+## Two Operating Modes
+
+The protocol defines exactly two valid modes. There is no third mode, no hybrid, and no silent transition between them.
+
+<Tabs>
+  <Tab title="ALIGNMENT / SHAPING MODE">
+    Used when the idea is still being formed.
+
+    **Goal:** close scope, identify hard constraints, isolate real gates, shape the architecture, expose trade-offs, and separate consolidated decisions from discarded paths.
+
+    **In this mode, the AI must not:**
+    - Write final specs
+    - Generate final files
+    - Lock detailed artifacts too early
+    - Pretend unresolved points are resolved
+
+    This is the default mode. The session stays here until the operator explicitly approves a transition.
+  </Tab>
+  <Tab title="DRAFTING / SYNTHESIS MODE">
+    Used **only after the real gates are closed** and the operator has given explicit approval.
+
+    **Goal:** write the requested artifact, preserve the shaped structure, avoid reinterpretation, and keep output aligned with the already-consolidated form.
+
+    **In this mode, the AI must not:**
+    - Reopen resolved gates (unless a contradiction is detected)
+    - Add new architecture
+    - Inflate the design
+    - Inject meta-commentary into the final artifact
+
+    Artifacts produced here must read as if they were meant to exist on their own — no traces of shaping, no process notes, no coaching language.
+  </Tab>
+</Tabs>
+
+### The Rule About Switching
+
+The AI must not switch from ALIGNMENT / SHAPING MODE to DRAFTING / SYNTHESIS MODE without **explicit operator approval**. Explicit approval means one of the following:
+
+- A direct affirmative ("yes," "do it," "go ahead," or equivalent)
+- A direct instruction to produce the artifact or enter drafting
+- An operator-initiated reformulation of the consolidated structure that treats it as final
+
+The following do **not** count as explicit approval:
+
+- Absence of objection
+- Positive feedback on shaping output
+- Enthusiasm about the idea
+- Operator silence after a model proposal
+
+If approval is ambiguous, the AI asks once. It does not proceed on inference.
+
+## Real Gates
+
+A gate is blocking only if leaving it unresolved would make the artifact wrong, unusable, or structurally misleading. The protocol is specific about what qualifies.
+
+**A point is a real gate only if it changes one or more of these axes:**
+
+| Axis | Why It Blocks |
+|------|---------------|
+| **Scope** | Determines what the system includes and excludes |
+| **Hard constraints** | Non-negotiable limits that cannot be worked around |
+| **Host or runtime model** | Changes what can actually be executed or deployed |
+| **Persistence model** | Changes how state is stored, retrieved, or lost |
+| **Lifecycle** | Affects how the system starts, runs, and terminates |
+| **Source of truth** | Changes which system or record is authoritative |
+| **Success criteria** | Defines what "done" and "working" actually mean |
+
+Everything else is **non-blocking by default**. Non-blocking points should be resolved by cost/benefit — the AI decides, states the decision briefly, and keeps moving. A cost/benefit decision is only valid if the operator has already established a clear preference on the relevant axis, and the decision does not introduce a new assumption about scope, runtime, persistence, or source of truth.
+
+<Note>
+  Do not create fake gates around naming, formatting, cosmetic structure, or minor implementation details unless they materially alter one of the real axes above. Fake gates stall sessions without improving the output.
+</Note>
+
+## Mandatory Behaviors
+
+The protocol defines six behaviors that are required during shaping — not optional formatting choices.
+
+<Accordion title="Declare provenance in shaping output">
+  During ALIGNMENT / SHAPING MODE, every non-trivial element in the output must carry a declared source. Provenance marking is a structural output requirement, not optional formatting.
+
+  | Label | Meaning |
+  |-------|---------|
+  | **OP** | Stated or confirmed by the operator |
+  | **MODEL** | Proposed by the model, not yet confirmed |
+  | **SHARED** | Built jointly and explicitly accepted by the operator |
+
+  Do not mix sources inside a single element without surfacing the mix. Do not present MODEL proposals as neutral observations.
+</Accordion>
+
+<Accordion title="Reverse-engineer before proposing">
+  Do not start with a solution. Start by extracting:
+  - What the operator is actually trying to build
+  - What problem is being solved
+  - What constraints are non-negotiable
+  - What the real success condition is
+</Accordion>
+
+<Accordion title="Separate layers early">
+  Always distinguish between:
+  - Philosophy
+  - Constraints
+  - Runtime mechanics
+  - Architecture
+  - Artifact structure
+  - Implementation details
+
+  Do not let one layer leak into another.
+</Accordion>
+
+<Accordion title="Keep source of truth singular">
+  Prefer one canonical source of truth per concern. Do not tolerate overlapping authority, duplicated semantics, parallel rule systems, or hidden fallback logic presented as architecture.
+</Accordion>
+
+<Accordion title="Keep artifacts clean">
+  Final artifacts must not contain meta-notes about the conversation, traces of shaping, coaching language, operator-facing process commentary, "decided later" style notes, or unnecessary explanation of why the artifact is good. Artifacts should read as if they were meant to exist on their own.
+</Accordion>
+
+<Accordion title="Prefer mechanical validation over inference">
+  If a runtime, file, source, or executor can validate something mechanically, prefer that over model inference. Use abstract tool classes only when necessary: files, sources, web, runtime, code executor, artifacts. Do not over-specify host-specific behavior unless the operator explicitly asks for it.
+</Accordion>
+
+## Provenance Labeling in Practice
+
+During shaping, every non-trivial element gets one of three labels. This is how the AI communicates what is grounded versus what it has introduced.
+
+| Label | What It Means | When to Use It |
+|-------|---------------|----------------|
+| **OP** | The operator stated or confirmed this | Direct quotes, confirmed constraints, operator-validated decisions |
+| **MODEL** | The model proposed this and it has not been confirmed | Architecture proposals, default choices, inferred constraints |
+| **SHARED** | Built jointly and explicitly accepted by the operator | Decisions that emerged in conversation and were accepted by both |
+
+<Tip>
+  If you see a MODEL-labeled item in a shaping output, it is a proposal — not a decision. Do not treat it as confirmed until you explicitly accept it.
+</Tip>
+
+## Practical Example: Loading the Protocol
+
+Before asking AI to design a system, load the protocol and give the raw idea. The sequence looks like this:
+
+```
+[Load: Idea Shaping Protocol v1]
+
+I want to build a tool that lets our team submit weekly status updates 
+and automatically surfaces blockers to the right people. 
+I have not figured out the details yet — just help me shape this.
+```
+
+The AI will not produce a spec. It will instead:
+
+1. Extract what is actually being built (OP)
+2. Ask about scope gates (individual vs. team, async vs. synchronous, notification routing logic)
+3. Separate philosophy (visibility, accountability) from runtime mechanics (trigger conditions, routing rules)
+4. Label everything it proposes as MODEL until confirmed
+5. Surface any real gates before suggesting an artifact path
+
+Only after those gates are closed — and after you explicitly approve — will the AI switch to DRAFTING / SYNTHESIS MODE and produce a spec.
+
+## Failure Conditions
+
+The protocol is explicitly failing if the AI:
+
+- Infers architecture before the gates are closed
+- Asks obvious questions that the current structure already answers
+- Creates fake uncertainty around non-blocking details
+- Over-specifies file structure too early
+- Mixes philosophy with runtime mechanics
+- Mixes global rules with local behavior
+- Adds new sections or files just to feel "complete"
+- Writes final artifacts without explicit approval
+- Produces artifacts contaminated with process meta-info
+- Optimizes for theoretical elegance over operational survivability
+
+## Success Condition
+
+The protocol is succeeding when:
+
+- The idea becomes structurally legible
+- The real gates are few and explicit
+- Non-blocking choices are resolved without friction
+- Final artifacts are requested only after the shape is stable
+- The final output can be handed off externally without reinterpretation
+- The result is simpler than the initial conversation, but stronger

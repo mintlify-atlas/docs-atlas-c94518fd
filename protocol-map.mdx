@@ -1,0 +1,118 @@
+---
+title: "Protocol Selection Map: Choose by Failure Mode"
+sidebarTitle: "Protocol Map"
+description: "Match your situation to the right AI Protocol Kit contract. Organized by what can go wrong: ambiguity, wrong output, evidence loss, publication errors, or session drift."
+---
+
+This map is organized by failure mode, not by protocol name. Each lane describes a class of situation — what tends to go wrong, and why — and lists the protocols that address it. If you already know the failure mode you are trying to prevent, find that lane and use the protocol it points to. If you are not sure, scan the lane descriptions and pick the one that most closely matches what you are actually worried about in this specific task.
+
+<Tabs>
+  <Tab title="Shape the Work">
+    Use these protocols when the task is still ambiguous, premature, overloaded, or underspecified. The common failure here is that AI collapses a fuzzy idea into a confident output too quickly — before the actual scope, constraints, or intent have been established. These protocols interrupt that collapse and force the shape of the work to be explicit before anything gets built or written.
+
+    <CardGroup cols={2}>
+      <Card title="Idea Shaping Protocol" href="/protocols/idea-shaping" icon="lightbulb">
+        Turn a rough idea into a clear structure before asking AI to write, plan, design, or build anything.
+      </Card>
+      <Card title="Pre-Task Expansion Protocol" href="/protocols/pre-task-expansion" icon="magnifying-glass">
+        Stop AI from collapsing too quickly into the obvious answer by exposing alternative readings, tensions, and surrounding shape first.
+      </Card>
+      <Card title="Structural Shaping Protocol" href="/protocols/structural-shaping" icon="sitemap">
+        Shape ambiguous input into operational form before synthesis, with gates, evidence level, source boundaries, and artifact direction explicit.
+      </Card>
+      <Card title="System Reading Protocol" href="/protocols/system-reading" icon="radar">
+        Read the gap between declared intent and observable behavior to extract the operative principle of a system without premature solutions.
+      </Card>
+    </CardGroup>
+  </Tab>
+  <Tab title="Brief the Artifact">
+    Use these protocols when the AI needs a clear, complete brief before it starts writing, building, or structuring output. The failure mode here is output that is technically competent but wrong for the context — built for a generic reader, missing key constraints, or structured around assumptions that were never stated. These protocols close those gaps before a single line is drafted.
+
+    <CardGroup cols={2}>
+      <Card title="HTML Page & Tool Briefing Protocol" href="/protocols/html-page-and-tool-briefing" icon="code">
+        Guide AI from raw intake to a complete implementation brief for a static HTML page, web surface, or local tool.
+      </Card>
+      <Card title="Output for Real Readers Protocol" href="/protocols/output-for-real-readers" icon="users">
+        Write guides, README text, emails, pages, forms, or instructions with reader identity, purpose, tone, and language constraints closed before drafting.
+      </Card>
+    </CardGroup>
+  </Tab>
+  <Tab title="Review Findings & Evidence">
+    Use these protocols when the job is inspection, bug capture, or evidence preservation — situations where the difference between what was observed and what was inferred matters. The failure mode is evidence drift: AI summarizes findings, the summaries become claims, and the claims are later treated as verified facts. These protocols enforce hard separation between observation, inference, uncertainty, and promotion.
+
+    <CardGroup cols={2}>
+      <Card title="Field Findings & Bugs Protocol" href="/protocols/field-findings-and-bugs" icon="bug">
+        Capture findings and bugs as structured artifacts while keeping evidence, inference, uncertainty, relations, and later promotion separate.
+      </Card>
+      <Card title="System Reading Protocol" href="/protocols/system-reading" icon="radar">
+        Read the gap between declared intent and observable behavior to extract the operative principle of a system without premature solutions.
+      </Card>
+    </CardGroup>
+  </Tab>
+  <Tab title="Reasoning & Constraints">
+    Use these protocols when the problem is not just unclear but structurally prone to collapse — where AI might resolve a real tension with a false compromise, oversimplify a constraint conflict, or default to the most plausible-sounding answer rather than the most defensible one. These protocols require the AI to expand the problem space, surface competing interpretations, and hold conflicting constraints in view before producing output.
+
+    <CardGroup cols={2}>
+      <Card title="Pre-Task Expansion Protocol" href="/protocols/pre-task-expansion" icon="magnifying-glass">
+        Stop AI from collapsing too quickly into the obvious answer by exposing alternative readings, tensions, and surrounding shape first.
+      </Card>
+      <Card title="System Reading Protocol" href="/protocols/system-reading" icon="radar">
+        Read the gap between declared intent and observable behavior to extract the operative principle of a system without premature solutions.
+      </Card>
+      <Card title="PHI-Lens Protocol" href="/protocols/phi-lens" icon="eye">
+        Handle non-trivial tasks where constraints interact and a flat compromise would hide the dominant force, counterforce, or asymmetry.
+      </Card>
+    </CardGroup>
+  </Tab>
+  <Tab title="GitHub & Publishing">
+    Use these protocols when the work touches GitHub repositories, README files, GitHub Pages, public project pages, discovery files, badges, or any publication step that is difficult to reverse. The failure modes here are publication without review, incorrect metadata, broken discovery files, and badges or counters added without a real purpose. These protocols add explicit confirmation gates before any commit, push, deploy, or public-facing change.
+
+    <CardGroup cols={2}>
+      <Card title="GitHub Repository Publication Protocol" href="/protocols/github-repository-publication" icon="github">
+        Prepare a repository for clean GitHub publication with project classification, workspace audit, and confirmation before commits or push.
+      </Card>
+      <Card title="GitHub README Framing Protocol" href="/protocols/github-readme-framing" icon="file-lines">
+        Write or restructure a GitHub README from repository evidence, reader fit, and the real job the README must perform.
+      </Card>
+      <Card title="GitHub Pages Discovery Protocol" href="/protocols/github-pages-discovery" icon="globe">
+        Prepare GitHub Pages sites with correct publication roots, discovery files, canonical URLs, sitemap, and robots handling.
+      </Card>
+      <Card title="GitHub Badge & Telemetry Protocol" href="/protocols/github-badge-telemetry" icon="chart-bar">
+        Decide which badges, counters, analytics, or validation checks make sense for a repo without adding vanity widgets.
+      </Card>
+      <Card title="Public Page Publication Protocol" href="/protocols/public-page-publication" icon="rocket">
+        Prepare or publish a public page with page role, audience, metadata, accessibility, and publication risks closed before deploy.
+      </Card>
+      <Card title="HTML & Website Discovery Protocol" href="/protocols/html-website-discovery" icon="satellite-dish">
+        Prepare static HTML pages with machine-readable discovery files, head metadata, canonical URLs, sitemap, and robots rules.
+      </Card>
+    </CardGroup>
+  </Tab>
+  <Tab title="Govern Agentic Sessions">
+    Use these protocols when the AI session itself needs stronger behavioral rails — when the AI is operating across multiple files, tools, or repo states, or when a task requires multiple passes with review between them. The failure mode here is an AI that acts without grounding: writing files it has not read, confirming steps it has not verified, or continuing when the task is not actually ready for the next step. These protocols impose posture, ledger discipline, and executor/reviewer separation.
+
+    <CardGroup cols={2}>
+      <Card title="GPT Agentic Posture Contract" href="/protocols/gpt-agentic-posture" icon="robot">
+        Make ChatGPT work more like Codex: tool-aware, grounded in real files, ledger-based, verification-oriented, and willing to stop when not ready.
+      </Card>
+      <Card title="Triad AI Orchestration Protocol" href="/protocols/triad-ai-orchestration" icon="triangle">
+        Run a review loop between an executing AI and a reviewing AI over snapshots, repo state, or diffs while preserving target authority.
+      </Card>
+      <Card title="PHI-Lens Protocol" href="/protocols/phi-lens" icon="eye">
+        Handle non-trivial tasks where constraints interact and a flat compromise would hide the dominant force, counterforce, or asymmetry.
+      </Card>
+    </CardGroup>
+  </Tab>
+</Tabs>
+
+## About protocol overlap
+
+Some protocols appear in more than one lane. System Reading Protocol appears under both "Shape the Work" and "Review Findings & Evidence." Pre-Task Expansion appears under both "Shape the Work" and "Reasoning & Constraints." PHI-Lens appears under both "Reasoning & Constraints" and "Govern Agentic Sessions."
+
+This is intentional, not a mistake. These protocols are genuinely useful in more than one failure-mode context — they can play different roles depending on what the task needs. Seeing a protocol in two lanes does not mean you should load both lanes at once. It means the protocol is versatile, and your situation determines which lane's framing is most relevant. Pick the lane that describes your actual failure risk, use the protocol it recommends, and do not stack unless you have a specific reason documented in the [How to Use](/how-to-use) guide.
+
+<Warning>
+  **Canvas compatibility note**
+
+  The GPT Agentic Posture Contract depends on Canvas as a separate, persistent execution ledger. Since OpenAI's May 28, 2026 GPT-5.5 update, Canvas is no longer available in GPT-5.5 Instant or GPT-5.5 Thinking. Without Canvas, the contract remains useful as posture guidance, but it should not be treated as a full agentic execution protocol.
+</Warning>

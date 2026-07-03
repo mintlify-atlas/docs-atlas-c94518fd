@@ -1,0 +1,103 @@
+---
+title: "AI Protocol Kit: What It Is and Why It Works"
+sidebarTitle: "Introduction"
+description: "AI Protocol Kit is a set of behavioral contracts that replace vague prompts with structured operating rules — reducing the most common AI-assisted workflow failures."
+---
+
+AI Protocol Kit is not a collection of magic prompts. It is a set of working contracts — explicit instructions you give to an AI before it starts a task, telling it how to approach the work, what to verify, what not to assume, when to stop, and what kind of output actually counts as done. Each protocol was shaped from real workflows: rough ideas that collapsed too quickly, repository reviews that invented facts, README files written for the wrong reader, and publication steps that skipped the checks that matter. The kit gives those workflows a repeatable structure.
+
+## Why protocols exist: the predictable failure modes
+
+AI-assisted work fails in recognizable patterns. Knowing those patterns is what makes it possible to address them directly.
+
+**Premature convergence.** An AI receives a vague prompt and immediately produces a confident, polished answer — skipping the question of whether the prompt was even the right one. The output looks complete but answers the wrong thing. Protocols like Pre-Task Expansion and Idea Shaping interrupt this by requiring alternative readings and explicit scoping before any synthesis begins.
+
+**Invented facts and evidence drift.** AI tools summarize, paraphrase, and infer. In unstructured sessions, inferences quietly become claims, claims become evidence, and by the end the AI is defending a position built on its own summaries. Protocols like Field Findings & Bugs and System Reading enforce hard separations between what was observed and what was inferred.
+
+**Wrong reader fit.** AI writes fluently for a generic reader that does not exist in your actual workflow. The output is readable but useless for the specific person who needs to act on it. Output for Real Readers Protocol forces reader identity, purpose, and language register to be closed before drafting begins.
+
+**Publishing before review.** In agentic sessions, AI tools can move fast — committing files, pushing changes, deploying pages — without a human-readable gate in the loop. The GitHub and publication protocols add explicit confirmation checkpoints before any irreversible action.
+
+## Situation-first selection
+
+The right way to pick a protocol is by identifying the failure mode you want to prevent — not by recognizing the protocol's name. Ask what can go wrong in this specific task, then find the protocol that addresses that failure directly. This is why the [Protocol Map](/protocol-map) organizes protocols by failure mode rather than by category. A protocol that looks like it belongs to "GitHub work" may be exactly the one you need for a documentation publishing step, even if your project has nothing to do with GitHub.
+
+## All 17 protocols
+
+<CardGroup cols={2}>
+  <Card title="Idea Shaping Protocol" href="/protocols/idea-shaping" icon="lightbulb">
+    Turn a rough idea into a clear structure before asking AI to write, plan, design, or build anything.
+  </Card>
+  <Card title="Pre-Task Expansion Protocol" href="/protocols/pre-task-expansion" icon="magnifying-glass">
+    Stop AI from collapsing too quickly into the obvious answer by exposing alternative readings and tensions first.
+  </Card>
+  <Card title="Structural Shaping Protocol" href="/protocols/structural-shaping" icon="sitemap">
+    Shape ambiguous input into operational form before synthesis, with gates, evidence level, and artifact direction explicit.
+  </Card>
+  <Card title="System Reading Protocol" href="/protocols/system-reading" icon="radar">
+    Read the gap between declared intent and observable behavior to extract the operative principle of a system.
+  </Card>
+  <Card title="Output for Real Readers Protocol" href="/protocols/output-for-real-readers" icon="users">
+    Write reader-facing material with reader identity, purpose, tone, and language constraints closed before drafting.
+  </Card>
+  <Card title="HTML Page & Tool Briefing Protocol" href="/protocols/html-page-and-tool-briefing" icon="code">
+    Guide AI from raw intake to a complete implementation brief for a static HTML page, web surface, or local tool.
+  </Card>
+  <Card title="Field Findings & Bugs Protocol" href="/protocols/field-findings-and-bugs" icon="bug">
+    Capture findings and bugs as structured artifacts while keeping evidence, inference, uncertainty, and promotion separate.
+  </Card>
+  <Card title="GitHub Repository Publication Protocol" href="/protocols/github-repository-publication" icon="github">
+    Prepare a repository for clean GitHub publication with workspace audit, feature choices, and confirmation before push.
+  </Card>
+  <Card title="GitHub README Framing Protocol" href="/protocols/github-readme-framing" icon="file-lines">
+    Write or restructure a GitHub README from repository evidence, reader fit, and the real job the README must perform.
+  </Card>
+  <Card title="GitHub Pages Discovery Protocol" href="/protocols/github-pages-discovery" icon="globe">
+    Prepare GitHub Pages sites with correct publication roots, discovery files, canonical URLs, and sitemap handling.
+  </Card>
+  <Card title="GitHub Badge & Telemetry Protocol" href="/protocols/github-badge-telemetry" icon="chart-bar">
+    Decide which badges, counters, and analytics make sense for a repo or GitHub Page without adding vanity widgets.
+  </Card>
+  <Card title="Public Page Publication Protocol" href="/protocols/public-page-publication" icon="rocket">
+    Prepare, restructure, or publish a public page with metadata, accessibility, links, and publication risks closed before deploy.
+  </Card>
+  <Card title="HTML & Website Discovery Protocol" href="/protocols/html-website-discovery" icon="satellite-dish">
+    Prepare static HTML pages with machine-readable discovery files, head metadata, sitemap, and robots rules.
+  </Card>
+  <Card title="GPT Agentic Posture Contract" href="/protocols/gpt-agentic-posture" icon="robot">
+    Make ChatGPT work more like Codex: tool-aware, grounded in real files, ledger-based, and willing to stop when not ready.
+  </Card>
+  <Card title="Triad AI Orchestration Protocol" href="/protocols/triad-ai-orchestration" icon="triangle">
+    Run a review loop between an executing AI and a reviewing AI over snapshots, repo state, and diffs with target authority preserved.
+  </Card>
+  <Card title="PHI-Lens Protocol" href="/protocols/phi-lens" icon="eye">
+    Handle non-trivial AI tasks where constraints interact and a flat compromise would hide the dominant force or asymmetry.
+  </Card>
+  <Card title="PowerShell WinForms Generator Protocol" href="/protocols/powershell-winforms-generator" icon="window">
+    Generate structured, runnable PowerShell WinForms applications with layout, controls, and event logic in a single pass.
+  </Card>
+</CardGroup>
+
+## What makes a protocol different from a system prompt
+
+A system prompt sets a persona or a general disposition: "You are a helpful assistant" or "Always respond in formal English." It shapes tone and style but says nothing about what to do when the task is ambiguous, when evidence is uncertain, or when the right answer is to stop and ask rather than produce.
+
+A chain-of-thought instruction tells the AI to reason step by step before answering. That is useful for calculation and logic, but it does not define gates, stop conditions, output contracts, evidence separation, or reader-specific constraints.
+
+A protocol is a working contract. It defines:
+
+- **Scope gates** — what must be established before work proceeds
+- **Stop conditions** — when the AI should halt rather than guess
+- **Evidence rules** — what counts as a finding versus an inference
+- **Output contracts** — what the final deliverable must contain and what form it must take
+- **Review requirements** — what must be confirmed before irreversible actions
+
+Protocols are not passive style guides. They are active behavioral constraints that change what the AI does, when it does it, and what it refuses to do without authorization.
+
+## What this is not
+
+**Not a guarantee.** Protocols reduce common failure modes. They do not guarantee correctness, completeness, or fitness for your specific use case. Read the output, test it, and apply your own judgment.
+
+**Not a replacement for judgment.** These contracts structure the AI's behavior. They do not replace your assessment of whether the output is actually right. You are still the reviewer.
+
+**Not an override for safety, legality, or privacy.** No protocol in this kit overrides higher-priority instructions. Safety, legality, data integrity, privacy requirements, and tool limits remain above any protocol. If a protocol instruction conflicts with any of those, the protocol instruction does not apply.

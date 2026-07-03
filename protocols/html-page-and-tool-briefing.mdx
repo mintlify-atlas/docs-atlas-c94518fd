@@ -1,0 +1,176 @@
+---
+title: "HTML Page & Tool Briefing Protocol v2: From Intake to Ready Brief"
+sidebarTitle: "HTML Briefing"
+description: "HTML Page & Tool Briefing Protocol v2 runs structured intake that ends in a complete implementation brief for a static HTML page or tool — one shot."
+---
+
+The HTML Page & Tool Briefing Protocol v2 runs a structured intake-to-brief process that starts from zero and ends with a complete implementation brief ready for AI to build the file in one shot. The user answers, the AI listens, classifies, and guides. At the end the AI generates the brief autonomously — the user writes nothing in the brief itself. This protocol is specifically for static HTML pages, local web tools, and web surfaces where AI needs a complete, unambiguous spec before it writes a single line of code.
+
+## When to Use It
+
+Use this protocol before building any AI-generated static HTML page, local browser tool, or web surface where the structure, layout, behavior, and surface need to be decided — not invented during implementation.
+
+<CardGroup cols={2}>
+  <Card title="Static HTML Pages" icon="file-code">
+    Landing pages, project pages, public-facing pages where structure and content order must be locked before CSS is written.
+  </Card>
+  <Card title="Local Web Tools" icon="wrench">
+    Single-file browser tools, task trackers, note systems, or local utilities that run without a server and save to local storage or disk.
+  </Card>
+  <Card title="Web Surfaces" icon="window-restore">
+    Any interface where DOM order, responsive behavior, and interaction states need explicit decisions before implementation.
+  </Card>
+  <Card title="Briefing Before Handoff" icon="clipboard-check">
+    Sessions where a human needs a complete, confirmed brief to hand to a second AI or developer for implementation.
+  </Card>
+</CardGroup>
+
+## Response Classification System
+
+Everything said during intake is classified by the AI automatically. If a single answer touches multiple levels, the AI names all of them. You never classify anything yourself.
+
+| Level | Meaning | Handling Rule |
+|---|---|---|
+| **NOW** | Defines what it is and does today — goes into the base | Added to the functional map immediately |
+| **LATER** | Future feature, integration, or expansion | Parked in the log; AI returns to the original question |
+| **CONSTRAINT** | What it must not do or must not break | Becomes an explicit rule in the brief |
+| **ASSUMPTION** | Taken for granted but not yet decided | Clarified before moving on — never passed forward open |
+| **SURFACE** | Where it physically appears — which view, which layer, always visible or conditional | Required for every feature; a feature without a surface is blocked |
+| **PHILOSOPHY** | Core principle driving decisions — not a feature, a non-negotiable rail | Named by the AI, confirmed by the user before use |
+| **RAIL** | Operating rule derived from a philosophy — constrains design and code | Written as an explicit constraint in the brief |
+| **TRADE-OFF** | A tension already sensed or intrinsic to the design | Named by the AI, confirmed before building |
+
+<Warning>
+  **Fundamental rule: an unresolved ambiguity never passes to the next phase. A feature without a surface is blocked.** If you describe a feature but have not said where it lives — which view, which layer, always visible or conditional — the AI stops and asks before moving on.
+</Warning>
+
+## Phase 1 — Free Intake
+
+Free discovery. The AI guides without interrogating. One thing at a time. The areas below are explored in the flow of conversation — never presented as a list — in whatever order makes sense given what you are saying.
+
+<Steps>
+  <Step title="What It Is and What It Does">
+    What is it in one sentence? Who uses it and in what real context? What does the user do every time they open it? Is there a mandatory flow or can they enter from anywhere?
+  </Step>
+  <Step title="How It Looks">
+    How many views does it have? What dominates the page? What is always visible, what is hidden or collapsible? How does the user move between views?
+  </Step>
+  <Step title="HTML Structure and Visual Order">
+    The structural model is closed before synthesis. The AI determines: the logical DOM order of the content; which content is primary, secondary, supporting, or decorative; which sections require semantic HTML5 structure; whether visual order and reading order are the same; whether any element is being visually repositioned to compensate for weak HTML structure; which content must remain understandable before CSS is applied.
+
+    If visual order conflicts with logical DOM order, the trade-off is named and resolved before synthesis. CSS does not compensate for an unresolved HTML structure problem.
+  </Step>
+  <Step title="How It Behaves">
+    Real-time or on explicit confirmation? Do system states change what is visible? Does every primary action have visual feedback? What happens when something fails silently?
+  </Step>
+  <Step title="What It Holds and How">
+    What does it save and where? Free, typed, or schematized format? Does it export or import? How much does data grow over time? What happens if storage is full or disabled? One file or multiple? External dependencies allowed?
+  </Step>
+  <Step title="For Whom and Where">
+    Does the user already know the system or are they arriving for the first time? What tone? Desktop, mobile, or both? Used sitting down or under pressure on the move? Does a small screen change the visual hierarchy?
+  </Step>
+  <Step title="Responsive Behavior">
+    Closed explicitly for every HTML output. The AI determines: whether the page must support mobile, tablet, desktop, or all three; which content changes priority on small screens; whether any element requires fixed dimensions and why; whether any content can overflow its container; whether horizontal scroll is ever intentional; whether the layout should be single-column, stacked, split, or grid-like at each breakpoint. Horizontal page scroll is not allowed unless explicitly justified — if it appears without justification it is treated as a layout failure, not a styling detail.
+  </Step>
+  <Step title="Boundaries and Horizon">
+    What must it never do? What must it not make impossible later? Any future integrations already in mind?
+  </Step>
+</Steps>
+
+## Structure and Proportion Rails
+
+When the output is an HTML page, small interface, or local web tool, the following rails apply by default. If you choose a different visual system during intake, the confirmed system is followed instead.
+
+<Accordion title="HTML and CSS separation">
+  HTML is the structure. CSS is presentation. If an element must appear before another element in the actual reading or usage flow, move it earlier in the HTML. Do not use CSS to visually fake the correct order.
+</Accordion>
+
+<Accordion title="Proportions and spacing">
+  Use golden-ratio proportions as a visual guidance rail when they improve hierarchy, rhythm, section balance, or perceived visual growth. Use a Fibonacci-inspired spacing and sizing scale where practical for margins, gaps, section spacing, card spacing, and major layout proportions. Do not force these values when they damage readability, accessibility, responsiveness, content fit, tap targets, or usability. When proportion rules and usability conflict, usability wins.
+</Accordion>
+
+<Accordion title="Layout method">
+  Use flex as the default layout method for simple one-dimensional layouts. Use grid only when the layout is genuinely two-dimensional and the responsive behavior is explicit.
+</Accordion>
+
+## Phase 2 — Synthesis and Final Brief
+
+When intake is closed, the AI processes everything. If something does not add up, it goes back and asks — it does not move forward with open doubts.
+
+<Tabs>
+  <Tab title="Synthesis outputs">
+    The synthesis produces six consolidated outputs before the brief is generated:
+
+    | Output | What It Contains |
+    |---|---|
+    | **Functional Map** | Real functions — primary, secondary, never — with surface for each one |
+    | **Data Schema** | Keys, formats, storage, limits — decided, not to be invented |
+    | **Final Texts** | All texts visible to the user — written by the AI from the process, not invented by the implementing AI |
+    | **Explicit Rules** | Constraints, rails, trade-offs — the implementing AI receives them as law |
+    | **Future Log** | Everything that emerged as LATER — parked, not lost |
+    | **Open Assumptions** | Everything not yet decided — blocking or non-blocking, explicitly declared |
+
+    The complete synthesis is shown to you before the brief is generated. Nothing is ambiguous when this phase closes.
+  </Tab>
+  <Tab title="Brief sections">
+    The brief is generated autonomously in a single message. The user writes nothing.
+
+    | Section | What It Contains |
+    |---|---|
+    | **1. Identity** | Name, subtitle, one sentence — no history |
+    | **2. Structure** | Views, hierarchy, surface — with section comments already decided |
+    | **3. Texts** | Exact copy-paste — the implementing AI does not invent a single word |
+    | **4. Data Schema** | Keys, formats, storage — complete and final |
+    | **5. Aesthetics** | Palette, CSS variables, visual reference |
+    | **6. Rules** | Constraints, rails, trade-offs — written as explicit prohibitions |
+    | **7. Out of Scope** | Explicit list of what does not go in — the implementing AI does not add it even if it seems obvious |
+    | **8. Environment** | Where it runs, how it saves, how it writes to disk |
+
+    Every HTML brief closes with this line, added automatically: *"Read everything. Do not write anything yet. Tell me what you did not understand or what seems contradictory. Then build the complete file in one shot."*
+  </Tab>
+</Tabs>
+
+## How This Differs from Output for Real Readers
+
+Both protocols run a structured intake before producing anything. The difference is what the intake closes.
+
+<CardGroup cols={2}>
+  <Card title="Output for Real Readers" icon="users">
+    Closes reader model, purpose, tone, language boundary, and section split. Produces a confirmed brief for any written, reader-facing output — guides, emails, forms, README text.
+  </Card>
+  <Card title="HTML Page & Tool Briefing" icon="code">
+    Closes structure, layout, DOM order, responsive behavior, surface, data schema, behavior states, and implementation rails. Produces a complete executable brief for a static HTML page or local tool.
+  </Card>
+</CardGroup>
+
+<Info>
+  The two protocols can be used in a minimal stack: Output for Real Readers closes the audience and content model, then HTML Page & Tool Briefing closes the implementation spec. Use one protocol for the session and the other for the artifact only when both are genuinely needed.
+</Info>
+
+## Practical Example: A Single-Page Local Task Tracker
+
+Say you want to build a single-file HTML task tracker that runs locally in a browser without a server. Here is what the intake conversation covers and why.
+
+<Accordion title="What it is and does">
+  The AI asks for one sentence describing what it is and what the user does every time they open it. For a task tracker, this surfaces whether tasks are meant to persist between sessions (which requires localStorage), whether there is a mandatory entry flow (new task before anything else) or free navigation, and whether the tool is used under time pressure — which affects how much friction is acceptable in the primary action.
+</Accordion>
+
+<Accordion title="Surface — where features live">
+  Every feature proposed during intake requires a surface before it can go into the functional map. If you say "I want to mark tasks urgent," the AI immediately asks: where does that appear — inline in the task row, in a detail view, via a keyboard shortcut? A feature without a surface is blocked until it has a location.
+</Accordion>
+
+<Accordion title="HTML structure question">
+  For a task list, the AI closes whether the task items should be a `<ul>` with `<li>` elements or a custom structure, whether the input form sits above or below the list in the DOM (not just visually), and whether the empty state — no tasks yet — requires a different content block in the HTML or can be handled by CSS alone.
+</Accordion>
+
+<Accordion title="Responsive behavior">
+  Even for a local tool used only on desktop, the AI asks explicitly whether mobile support is out of scope. If it is confirmed out of scope, that goes into the Out of Scope section of the brief as an explicit statement — not an assumption.
+</Accordion>
+
+<Accordion title="LATER items that surface during intake">
+  Common examples for a task tracker: due dates, priority tiers, export to CSV, shared mode. Each one is classified LATER, parked in the Future Log, and the conversation returns to the question that was being answered. None of these get into the brief unless you promote them during intake.
+</Accordion>
+
+<Note>
+  The practical value of the protocol is not that it asks good questions — it is that nothing reaches the implementing AI as an ambiguity. Every open question that reaches implementation becomes either a wrong assumption or a feature invented without a brief. The protocol prevents both.
+</Note>

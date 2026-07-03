@@ -1,0 +1,99 @@
+{
+  "projectType": "general",
+  "projectName": "AI Protocol Kit",
+  "projectDescription": "A collection of practical behavioral contracts and protocols for making AI-assisted work more structured, inspectable, and repeatable across tasks like ideation, output shaping, GitHub publication, HTML tooling, agentic sessions, and review.",
+  "theme": "luma",
+  "primaryColor": "#5B5BD6",
+  "lightColor": "#EEEEFF",
+  "darkColor": "#1A1A2E",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "how-to-use",
+              "protocol-map"
+            ]
+          },
+          {
+            "group": "Shape & Reason",
+            "pages": [
+              "protocols/idea-shaping",
+              "protocols/pre-task-expansion",
+              "protocols/structural-shaping",
+              "protocols/system-reading"
+            ]
+          },
+          {
+            "group": "Brief & Output",
+            "pages": [
+              "protocols/output-for-real-readers",
+              "protocols/html-page-and-tool-briefing",
+              "protocols/field-findings-and-bugs"
+            ]
+          },
+          {
+            "group": "GitHub & Publication",
+            "pages": [
+              "protocols/github-repository-publication",
+              "protocols/github-readme-framing",
+              "protocols/github-pages-discovery",
+              "protocols/github-badge-telemetry",
+              "protocols/public-page-publication",
+              "protocols/html-website-discovery"
+            ]
+          },
+          {
+            "group": "Agentic & Orchestration",
+            "pages": [
+              "protocols/gpt-agentic-posture",
+              "protocols/triad-ai-orchestration",
+              "protocols/phi-lens",
+              "protocols/powershell-winforms-generator"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "stacking-guide",
+              "license"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "16 production-ready behavioral contracts covering the full AI-assisted workflow lifecycle",
+    "Situation-first protocol selection: pick by failure mode, not by name",
+    "Explicit operating modes, gate conditions, and stop conditions in every protocol",
+    "Evidence labeling (verified / inferred / hypothetical) enforced across analytical protocols",
+    "GitHub-specific protocols for README authoring, Pages publication, badge hygiene, and discovery infrastructure",
+    "Agentic session governance via posture contract and triad orchestration topology",
+    "PowerShell WinForms desktop app generation protocol with tiered safety constraints",
+    "Minimal stacking guidance: default to one protocol, stack only when justified"
+  ],
+  "publicApiSurface": [
+    "Idea Shaping Protocol v1",
+    "Pre-Task Expansion Protocol v1",
+    "Structural Shaping Protocol v1",
+    "System Reading Protocol v0.2",
+    "Output for Real Readers Protocol v2",
+    "HTML Page & Tool Briefing Protocol v2",
+    "Field Findings & Bugs Protocol v2",
+    "GitHub Repository Publication Preparation Protocol v2",
+    "GitHub README Framing and Authoring Protocol v2",
+    "GitHub Pages Discovery Set Protocol v1",
+    "GitHub Badge, Telemetry & Counter Protocol v1.2.3",
+    "Public Page Publication Protocol v2",
+    "HTML and Website Discovery Set Protocol v1.2",
+    "GPT Agentic Posture Contract",
+    "Triad AI Orchestration Protocol v3",
+    "PHI-Lens Protocol v4.a",
+    "PowerShell WinForms App Generator Protocol v1"
+  ]
+}

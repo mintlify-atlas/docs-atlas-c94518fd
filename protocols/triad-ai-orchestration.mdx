@@ -1,0 +1,165 @@
+---
+title: "Triad AI Orchestration Protocol v3: Human-Mediated AI Review Loop"
+sidebarTitle: "Triad Orchestration"
+description: "Triad AI Orchestration Protocol v3 defines a three-actor topology where a human mediates between an executing AI and a reviewing AI — preventing direct AI-to-AI authority."
+---
+
+The Triad AI Orchestration Protocol v3 defines a structured three-actor topology for AI-assisted work sessions where an executing AI and a reviewing AI must remain separated. The human Operator (OP) is the only permitted bridge between them. Direct AI-to-AI contact is explicitly forbidden. This is not a recommendation — it is a hard structural rule enforced by the protocol.
+
+---
+
+## Topology
+
+The communication structure is fixed:
+
+```
+AI_EXEC  ↔  OP  ↔  AI_REVIEW
+```
+
+<Warning>
+  **Direct AI-to-AI contact is FORBIDDEN.** AI_EXEC and AI_REVIEW are never directly connected. All exchange between them passes through OP. OP is the only real target authority.
+</Warning>
+
+---
+
+## Actors
+
+| Actor | Definition | Role |
+|---|---|---|
+| **OP** | Human controller and mediator | The only bridge between AI_EXEC and AI_REVIEW; the only real target authority; decides what enters REAL_TARGET |
+| **AI_EXEC** | Observed external execution actor near the real target | Works near REAL_TARGET; not guaranteed to follow this protocol; not commanded by this protocol |
+| **AI_REVIEW** | Adversarial fix consultant on reference | Advisory only; proposes fixes, never applies them |
+| **REAL_TARGET** | Operational source of truth | Changes only when OP or authorized AI_EXEC applies changes outside AI_REVIEW |
+| **REFERENCE** | Local or uploaded copy available to AI_REVIEW | Used by AI_REVIEW for inspection and review; not equivalent to REAL_TARGET |
+
+---
+
+## Core Rules
+
+<CardGroup cols={2}>
+  <Card title="This protocol commands AI_REVIEW only" icon="shield-halved">
+    It does not command AI_EXEC. AI_EXEC is treated as an observed external actor. Do not command AI_EXEC as if it reads this protocol.
+  </Card>
+  <Card title="OP mediates all exchange" icon="arrows-left-right-to-line">
+    OP transfers AI_EXEC output to AI_REVIEW and AI_REVIEW proposals back to AI_EXEC. Neither AI communicates with the other directly.
+  </Card>
+  <Card title="AI_REVIEW proposes; OP decides" icon="scale-balanced">
+    AI_REVIEW output is advisory only. OP decides whether to accept, restrict, reject, or defer. REAL_TARGET changes only outside AI_REVIEW.
+  </Card>
+  <Card title="REFERENCE ≠ REAL_TARGET" icon="not-equal">
+    Updating the local REFERENCE is not the same as updating REAL_TARGET. AI_REVIEW must never claim REAL_TARGET was updated when only REFERENCE changed.
+  </Card>
+</CardGroup>
+
+---
+
+## What AI_REVIEW Must Do
+
+<Steps>
+  <Step title="Preserve OP decision authority">
+    Treat OP as the only bridge between AI_EXEC and AI_REVIEW. Never override OP scope or treat OP as passive transport only.
+  </Step>
+  <Step title="Produce fix proposals, not applied fixes">
+    Produce patch shapes, not real target edits. Produce test proposals, not test results — unless evidence was explicitly provided.
+  </Step>
+  <Step title="Analyze risk without implying execution">
+    Risk analysis is advisory. AI_REVIEW does not execute or apply anything.
+  </Step>
+  <Step title="Update only local REFERENCE when authorized">
+    Update only the local REFERENCE when OP provides current replacement material. Do not treat that update as a REAL_TARGET change.
+  </Step>
+</Steps>
+
+---
+
+## What AI_REVIEW Must NOT Do
+
+<Accordion title="Forbidden actions for AI_REVIEW">
+  - Modify REAL_TARGET
+  - Claim REAL_TARGET was updated
+  - Apply fixes
+  - Imply files were changed
+  - Treat a proposed patch as applied
+  - Treat a local REFERENCE update as a REAL_TARGET update
+  - Override OP scope
+  - Treat OP as passive transport only
+  - Expand beyond OP intent without stating why it is necessary
+</Accordion>
+
+---
+
+## Authority Order for AI_REVIEW
+
+When determining what to treat as current and authoritative, AI_REVIEW follows this order — highest authority first:
+
+| Priority | Source |
+|---|---|
+| 1 | OP current explicit instruction |
+| 2 | OP-provided current file / block / version |
+| 3 | REFERENCE current for AI_REVIEW |
+| 4 | AI_EXEC output explicitly transferred by OP |
+| 5 | Prior chat context |
+| 6 | Inference |
+
+<Note>
+  OTHER_AI_OUTPUT (any AI-produced material) is audit material, not authority. REFERENCE is not REAL_TARGET. AI_EXEC output is only treated as authoritative when OP explicitly transfers it.
+</Note>
+
+---
+
+## AI_EXEC Observation Rules
+
+AI_EXEC is external to this protocol. It may be near REAL_TARGET and may report or modify REAL_TARGET only if OP authorizes. It is **not guaranteed to follow this protocol**.
+
+<Warning>
+  AI_REVIEW must treat AI_EXEC as an observed external actor whose claims require explicit evidence before they are trusted. "Should work" is not tested. "Patched" is not applied unless status is explicit. "Tests pass" is not meaningful without test identity and result. AI_EXEC silence is not confirmation.
+</Warning>
+
+---
+
+## The UNKNOWN Rule
+
+AI_REVIEW must treat the following as **UNKNOWN** unless explicitly provided by OP or AI_EXEC with verifiable evidence:
+
+<Accordion title="Items that default to UNKNOWN">
+  - Whether AI_EXEC inspected REAL_TARGET
+  - Whether AI_EXEC inspected the relevant surface
+  - Whether target constraints were actually verified
+  - Whether a patch is proposed or applied
+  - Which files or blocks changed
+  - Whether tests or checks ran
+  - Exact test or check command used
+  - Exact test or check result
+  - Whether AI_EXEC output includes wrapper, footer, or environment notes
+  - Whether AI_EXEC claim exceeds evidence
+</Accordion>
+
+When a blocking UNKNOWN exists, AI_REVIEW does not infer, does not review from memory, and does not produce a fix proposal. It outputs `CONTEXT_REQUIRED` with the appropriate type and waits for OP to resolve the missing context.
+
+---
+
+## When to Use This Protocol
+
+<Tabs>
+  <Tab title="Good fit">
+    - Complex repository or file sessions where executor and reviewer must remain separated
+    - Sessions where an AI near the real target is making changes and a second AI is reviewing those changes
+    - Any session where patch/applied status, test evidence, or file-change claims need adversarial review before OP accepts them
+    - Multi-pass review loops where convergence must be tracked
+  </Tab>
+  <Tab title="Not needed">
+    - Simple single-AI sessions without a separate review layer
+    - Tasks where OP is reviewing AI output directly without a second AI involved
+    - Lightweight or short-lived tasks that do not involve real targets, patches, or test claims
+  </Tab>
+</Tabs>
+
+---
+
+## Stacking Rule
+
+<Note>
+  Use Triad Orchestration together with the **GPT Agentic Posture Contract** when the session also needs a Canvas-based execution ledger, repository work, and strong inference constraints. Add the **Field Findings & Bugs Protocol** when findings must be captured as structured evidence artifacts during the review loop.
+</Note>
+
+The default rule is one protocol. Stack only when executor/reviewer separation is genuinely needed in addition to session-level posture control.

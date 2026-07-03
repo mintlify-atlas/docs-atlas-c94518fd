@@ -1,0 +1,207 @@
+---
+title: "GitHub Pages Discovery Set Protocol v1"
+sidebarTitle: "Pages Discovery"
+description: "Generate machine-readable discovery files for GitHub Pages sites — only after deployment root, site type, and canonical URLs are fully classified and closed."
+---
+
+The GitHub Pages Discovery Set Protocol v1 is a working contract for building the machine-readable discovery layer on top of a GitHub Pages artifact. It provides infrastructure that helps crawlers, bots, LLM readers, and external systems understand what has been published — without competing with the human-facing page. Use it after a GitHub Pages deployment has been committed to, once the owner, repository, deployment type, and canonical URLs are known.
+
+<Warning>
+**This protocol applies only to artifacts published through GitHub Pages.** Do not apply it to generic static hosting, non-GitHub web hosting, SaaS apps, backend apps, CMS sites, or deployment targets that are not GitHub Pages. A custom domain is in scope only when it is configured for GitHub Pages. If the deployment target is not GitHub Pages, stop and use the HTML and Website Discovery Set Protocol instead.
+</Warning>
+
+## Core Principle
+
+Discovery Set is infrastructure. It helps crawlers, bots, LLM readers, and external systems understand the published GitHub Pages artifact. It must not compete with the human page. GitHub Pages path rules are part of the artifact. Never generate discovery URLs before the GitHub Pages publication root is closed.
+
+## GitHub Pages Gate
+
+Before generating any discovery files, all required variables must be closed. If any required value is missing, do not guess paths — ask for the missing deployment root or produce placeholders only.
+
+| Variable | Description |
+|----------|-------------|
+| `OWNER` | GitHub user or organisation name |
+| `REPO` | Repository name |
+| `PAGES_TYPE` | `USER_OR_ORG_SITE`, `PROJECT_SITE`, or `CUSTOM_DOMAIN_SITE` |
+| `SOURCE_BRANCH` | Branch used by GitHub Pages, when known |
+| `SOURCE_PATH` | `root` or `/docs`, when known |
+| `CUSTOM_DOMAIN` | Active custom domain, or `NONE` |
+| `DOMAIN_ROOT` | Absolute URL of the bare Pages host or custom domain |
+| `SITE_ROOT` | Absolute URL where the GitHub Pages artifact begins |
+| `DISCOVERY_ROOT` | Root where `llms.txt`, `raw-manifest.json`, `sitemap.xml`, and companion files live |
+| `CURRENT_PAGE_URL` | Absolute canonical URL of each canonical HTML page |
+
+## GitHub Pages Deployment Types
+
+<Tabs>
+  <Tab title="USER_OR_ORG_SITE">
+    **Repository pattern:** `OWNER.github.io`
+
+    **Default SITE_ROOT:** `https://OWNER.github.io/`
+
+    `DOMAIN_ROOT` usually equals `SITE_ROOT`. Root-relative discovery paths may be valid only when `DOMAIN_ROOT` and `SITE_ROOT` are the same.
+
+    **Example variables:**
+    ```
+    OWNER = example-user
+    REPO  = example-user.github.io
+    SITE_ROOT  = https://example-user.github.io/
+    DISCOVERY_ROOT = https://example-user.github.io/
+    ```
+  </Tab>
+  <Tab title="PROJECT_SITE">
+    **Repository pattern:** Any repository published under the owner GitHub Pages domain.
+
+    **Default SITE_ROOT:** `https://OWNER.github.io/REPO/`
+
+    **DOMAIN_ROOT:** `https://OWNER.github.io/`
+
+    <Warning>
+    PROJECT_SITE is the highest-risk case for broken discovery paths. Root-relative paths usually point to `DOMAIN_ROOT`, not `SITE_ROOT`. Never use `/llms.txt`, `/raw-manifest.json`, or `/sitemap.xml` for a project site unless `DOMAIN_ROOT` and `SITE_ROOT` are confirmed to be the same.
+    </Warning>
+
+    **Example variables:**
+    ```
+    OWNER = example-user
+    REPO  = example-project
+    SITE_ROOT  = https://example-user.github.io/example-project/
+    DISCOVERY_ROOT = https://example-user.github.io/example-project/
+    ```
+  </Tab>
+  <Tab title="CUSTOM_DOMAIN_SITE">
+    A custom domain configured for GitHub Pages.
+
+    `SITE_ROOT` depends on the configured custom domain and path. Do not assume `OWNER.github.io` path behaviour when a custom domain is active. Do not assume the custom domain is domain-root unless confirmed.
+
+    **Example variables:**
+    ```
+    CUSTOM_DOMAIN = example.com
+    SITE_ROOT  = https://example.com/
+    DISCOVERY_ROOT = https://example.com/
+    ```
+  </Tab>
+</Tabs>
+
+## Publication Variables and Default Resolution
+
+| Variable | Default |
+|----------|---------|
+| `DISCOVERY_ROOT` | equals `SITE_ROOT` |
+| `LLMS_URL` | `URL_JOIN(DISCOVERY_ROOT, "llms.txt")` |
+| `RAW_MANIFEST_URL` | `URL_JOIN(DISCOVERY_ROOT, "raw-manifest.json")` |
+| `SITEMAP_URL` | `URL_JOIN(DISCOVERY_ROOT, "sitemap.xml")` |
+| `ROBOTS_URL` (authoritative) | `URL_JOIN(DOMAIN_ROOT, "robots.txt")` |
+| `ROBOTS_URL` (companion) | `URL_JOIN(DISCOVERY_ROOT, "robots.txt")` |
+
+<Note>
+When constructing URLs, join path segments with exactly one slash. Do not construct discovery URLs through raw string concatenation. Prefer absolute URLs when in doubt.
+</Note>
+
+## Site vs. Page Classification
+
+Before generating discovery files, classify the artifact using the binary classifier:
+
+**Does this GitHub Pages artifact expose more than one canonical HTML URL under the same `SITE_ROOT`?**
+
+| Answer | Type |
+|--------|------|
+| Yes | `SITE` — multiple canonical HTML pages |
+| No | `PAGE` — single canonical HTML URL |
+
+<Info>
+Anchor links, GitHub repository links, links to `llms.txt`, `raw-manifest.json`, `sitemap.xml`, assets, or external pages do not make a `SITE`. Only multiple canonical HTML pages under the same `SITE_ROOT` make a `SITE`.
+</Info>
+
+## What the Discovery Set Includes
+
+<Tabs>
+  <Tab title="TYPE: PAGE">
+    **Definition:** Single canonical HTML URL, usually one `index.html` at `SITE_ROOT`.
+
+    **HEAD — required elements**
+    - `<title>`
+    - `<meta name="description">`
+    - `<meta name="robots" content="index, follow">`
+    - `<link rel="canonical" href="[CURRENT_PAGE_URL]">`
+    - `<link rel="alternate" type="text/plain" href="[LLMS_URL]" title="LLM-readable index">`
+    - `<link rel="alternate" type="application/json" href="[RAW_MANIFEST_URL]" title="Machine-readable manifest">`
+    - Open Graph: `og:title`, `og:description`, `og:type="website"`, `og:url`, `og:image` (absolute)
+    - JSON-LD: `SoftwareSourceCode` for repos/protocols/tools; `WebPage` for editorial; `ProfilePage` for profile surfaces
+    - Favicon
+
+    **Discovery root files**
+    - `index.html`
+    - `llms.txt`
+    - `raw-manifest.json`
+    - `sitemap.xml` — single `<url>` entry for `CURRENT_PAGE_URL`
+    - `robots.txt` — authoritative only when `DOMAIN_ROOT` is controlled; otherwise optional companion
+
+    **Footer**
+
+    Low-noise machine links (visible, small, non-dominant):
+    ```html
+    <!-- Discovery Set: low-noise links for crawlers, bots, and LLM readers. -->
+    <div class="machine-links" aria-label="Machine-readable project files">
+      <span>Machine-readable:</span>
+      <a href="llms.txt">llms.txt</a>
+      <a href="raw-manifest.json">manifest</a>
+      <a href="sitemap.xml">sitemap</a>
+    </div>
+    ```
+  </Tab>
+  <Tab title="TYPE: SITE">
+    **Definition:** Multiple canonical HTML URLs under the same `SITE_ROOT`.
+
+    **HEAD — every page**
+    - Page-specific `<title>`
+    - Page-specific `<meta name="description">`
+    - `<meta name="robots" content="index, follow">`
+    - Absolute `<link rel="canonical">` for the current page
+    - `<link rel="alternate">` pointing to `LLMS_URL`
+    - `<link rel="alternate">` pointing to `RAW_MANIFEST_URL`
+    - Page-specific Open Graph tags (absolute `og:url` and `og:image`)
+    - JSON-LD: `WebSite` on index; `WebPage` on subpages; optionally `SoftwareSourceCode` as `mainEntity` on index
+    - Favicon
+
+    **Discovery root files**
+    - `index.html`
+    - `llms.txt`
+    - `raw-manifest.json`
+    - `sitemap.xml` — one `<url>` entry per canonical HTML page
+    - `robots.txt` — authoritative only when `DOMAIN_ROOT` is controlled
+
+    **Footer — every page**
+
+    For the index page at `DISCOVERY_ROOT`, relative links are acceptable. For subpages, use absolute URLs:
+    ```html
+    <a href="https://OWNER.github.io/REPO/llms.txt">llms.txt</a>
+    <a href="https://OWNER.github.io/REPO/raw-manifest.json">manifest</a>
+    <a href="https://OWNER.github.io/REPO/sitemap.xml">sitemap</a>
+    ```
+  </Tab>
+</Tabs>
+
+## Robots Authority Rule
+
+`robots.txt` has a crawler-standard location at `DOMAIN_ROOT/robots.txt`.
+
+- If the GitHub Pages deployment controls `DOMAIN_ROOT`, place authoritative `robots.txt` there.
+- If the artifact is a `PROJECT_SITE` under `OWNER.github.io/REPO/` and does not control `DOMAIN_ROOT`, a `robots.txt` at `DISCOVERY_ROOT` may be included as a project-level discovery companion — but it must not be treated as authoritative crawler control.
+- `sitemap.xml` may be cited from an authoritative domain-root `robots.txt` when domain-root control exists.
+
+## Path Rules Summary
+
+| Element | Rule |
+|---------|------|
+| `canonical` | Always absolute URL; equals `CURRENT_PAGE_URL` |
+| `og:url` | Always absolute URL; equals `CURRENT_PAGE_URL` |
+| `og:image` | Always absolute URL |
+| `robots` sitemap entry | Must be absolute URL |
+| `llms.txt` / `raw-manifest.json` in HEAD | Relative allowed at `DISCOVERY_ROOT`; absolute preferred for subpages and PROJECT_SITE |
+| Root-relative paths (`/llms.txt`) | Only allowed when `DISCOVERY_ROOT` equals `DOMAIN_ROOT` |
+
+## What Happens When Required Variables Are Missing
+
+<Warning>
+If `OWNER`, `REPO`, `PAGES_TYPE`, `CUSTOM_DOMAIN` state, `SITE_ROOT`, or `DISCOVERY_ROOT` is missing, do not guess paths. Ask for the missing deployment root or produce placeholders only. Never assume a root-relative discovery path until `PAGES_TYPE`, `SITE_ROOT`, `DOMAIN_ROOT`, and `DISCOVERY_ROOT` are all closed.
+</Warning>

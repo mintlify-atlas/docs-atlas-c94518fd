@@ -1,0 +1,175 @@
+---
+title: "System Reading Protocol v0.2: Find the Operative Principle"
+sidebarTitle: "System Reading"
+description: "System Reading Protocol v0.2 extracts the operative principle that explains the gap between a system's declared intent and its observable behavior — before any solutions are proposed."
+---
+
+System Reading Protocol v0.2 is a two-phase behavioral contract for extracting the rule that actually governs a system. Not what the system says it does — what it demonstrably does. The protocol starts from a core axiom: the gap between declared intent and observable behavior is the primary datum. Everything a system states about its values, goals, and intentions is surface. What the system actually does — where it allocates time, money, attention, and exceptions — is the real signal. The protocol's job is to name the operative principle that lives in that gap.
+
+## Core Axiom
+
+> The gap between declared and real is the primary datum. Everything else is surface.
+
+**Declared** is what the system states it is, wants, values, or intends.
+
+**Real** is what the system does: where it allocates time, money, attention, and exceptions.
+
+The **operative principle** is the rule that actually governs the system. It lives in the gap. The protocol's task is to extract it, name it, and verify that it holds across all collected behavioral data.
+
+<Warning>
+  The AI operating under this protocol is not a dialogue assistant and not a solution generator. It does not produce output before Phase 2 conditions are met. Any output before the minimum threshold is a protocol failure.
+</Warning>
+
+## Two Phases
+
+The protocol defines exactly two phases. They do not overlap.
+
+<Tabs>
+  <Tab title="Phase 1 — EXTRACTION">
+    **Goal:** accumulate behavioral evidence. Do not interpret yet.
+
+    Extract three categories:
+    - **Declared positions** — stated values, intentions, goals, self-descriptions
+    - **Behavioral evidence** — actions taken, resources allocated, exceptions made, patterns over time
+    - **Candidate gaps** — points where declared positions and behavioral evidence diverge
+
+    Behavioral evidence only. Not opinions. Not explanations the subject offers for their own behavior.
+
+    ---
+
+    **Elicitation priority order** (when data is insufficient to identify a candidate gap):
+
+    | Priority | What to Ask |
+    |----------|-------------|
+    | 1 | **Resource allocation** — where did time, money, and attention actually go? |
+    | 2 | **Exceptions** — where did the system break its own stated rules? |
+    | 3 | **Pattern over time** — what has consistently happened regardless of stated intent? |
+    | 4 | **Absence** — what has the system never done despite declaring it would? |
+
+    Do not elicit declarations. Do not ask what the subject thinks or wants. Ask what they did, when, and under what conditions.
+
+    ---
+
+    **Opacity as behavioral evidence:**
+
+    When behavioral evidence is inaccessible or actively concealed, treat opacity itself as a data point. A system that conceals or obscures its own behavior is making a structural declaration. Extract:
+    - What is being concealed
+    - What the concealment pattern looks like
+    - What the concealment protects
+
+    Do not treat absence of data as absence of signal.
+
+    ---
+
+    **Minimum threshold to exit Phase 1:**
+
+    At least one candidate gap supported by **two or more independent behavioral data points**. Confirmed opacity counts as one behavioral data point — not as a full gap. A single observation does not qualify. Do not exit on one instance.
+  </Tab>
+  <Tab title="Phase 2 — CRYSTALLIZATION">
+    **Entry condition:** minimum threshold met.
+
+    Execute in sequence:
+
+    1. Name the operative principle — the rule that generates the observed gap
+    2. Verify it is consistent across all collected behavioral evidence
+    3. If inconsistent: return to Phase 1, collect more data
+    4. Separate confirmed patterns from open hypotheses
+    5. Produce the reading
+
+    ---
+
+    **Output structure:**
+
+    Required fields — always present:
+
+    | Field | Requirement |
+    |-------|-------------|
+    | **OPERATIVE PRINCIPLE** | One sentence, named, falsifiable |
+    | **GAP STRUCTURE** | Declared position vs. behavioral evidence, explicit |
+
+    Conditional fields — include only when the condition is true:
+
+    | Field | Include When |
+    |-------|-------------|
+    | **PATTERN STATUS** | At least one element is still hypothetical. Mark each element confirmed or hypothetical. |
+    | **OPEN** | An unresolved element would *change the name* of the operative principle (not just soften it), AND a behavioral question exists that could close it. If neither condition is met, treat as residual uncertainty — do not expose it. |
+
+    Do not include conditional fields to signal thoroughness. Include them only when their content changes the reading.
+
+    Do not produce solutions. Do not produce recommendations unless explicitly requested after Phase 2 output is delivered.
+  </Tab>
+</Tabs>
+
+## Absent Subject Handling
+
+When the subject is not present in the session and data arrives as documents, sources, or operator description, the protocol adapts without changing its threshold.
+
+Phase 1 proceeds identically. Elicitation is replaced by targeted retrieval or operator query for additional behavioral evidence. The minimum threshold applies unchanged. Do not lower the threshold because the subject cannot respond.
+
+<Note>
+  The protocol does not require the subject to be present. It requires behavioral evidence. If that evidence exists in documents, artifacts, or operator description, Phase 1 can proceed — and must meet the same standard before Phase 2 begins.
+</Note>
+
+## Gate Conditions
+
+The protocol defines exactly two valid reasons to stop and surface a problem to the operator:
+
+<CardGroup cols={2}>
+  <Card title="Undefined Scope" icon="circle-question">
+    Subject identity or scope is undefined. The protocol cannot proceed without knowing what system is being read.
+  </Card>
+  <Card title="Unresolvable Threshold" icon="ban">
+    The minimum threshold cannot be met and no additional data source is available. The protocol cannot produce a reading without sufficient behavioral evidence.
+  </Card>
+</CardGroup>
+
+All other ambiguity is resolved by cost/benefit — the AI decides, states the decision, and continues. The protocol explicitly forbids creating gates around interpretation style, output format, or framing choices.
+
+## Failure Conditions
+
+The protocol is failing if the AI:
+
+- Produces interpretation before the minimum threshold is met
+- Treats a single behavioral instance as a pattern
+- Elicits declarations instead of behavioral evidence
+- Mixes Phase 1 accumulation with Phase 2 interpretation
+- Produces solutions inside Phase 2 output
+- Exits Phase 1 on operator pressure without meeting the threshold
+- Treats active concealment as equivalent to inaccessible data (they are not the same — concealment is behavioral evidence)
+- Names an operative principle that does not hold across all collected data
+
+## Protocol Perimeter
+
+This protocol does not read:
+
+- Systems with no observable behavior and no accessible declared position
+- Systems where declared and real are genuinely aligned — no gap means no reading, not a failed reading
+- Future behavior — the protocol reads patterns, not predictions
+- Normative questions — whether the operative principle is good or bad is outside scope
+
+If the operator asks for output outside this perimeter, the AI surfaces the limit and stops.
+
+## System Reading vs. Pre-Task Expansion
+
+These two protocols address different problems and should not be conflated.
+
+| | System Reading v0.2 | Pre-Task Expansion v1 |
+|--|---------------------|----------------------|
+| **Subject** | A real system with observable behavior | A task prompt or problem statement |
+| **Primary datum** | Gap between declared intent and observable behavior | The problem framing itself |
+| **Output** | Operative principle that explains the gap | Expanded view of alternative framings before a response |
+| **Phase structure** | EXTRACTION → CRYSTALLIZATION | 5-step pre-response ritual |
+| **Use when** | You need to understand what a real system actually does, not what it says it does | A task may collapse too quickly into the obvious answer |
+
+<Tip>
+  If you are trying to understand an organization, a team, a product, or a codebase — where declared values and actual behavior may diverge — use System Reading. If you are trying to make sure you are solving the right problem before you answer a task, use Pre-Task Expansion.
+</Tip>
+
+## Success Condition
+
+The protocol succeeds when:
+
+- The operative principle is named and holds across all collected data
+- The gap structure is explicit and internally consistent
+- The output is simpler than the input but structurally stronger
+- Nothing in the output requires reinterpretation to be used

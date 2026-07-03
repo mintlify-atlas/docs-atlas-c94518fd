@@ -1,0 +1,121 @@
+---
+title: "Pre-Task Expansion Protocol v1: Stop the Obvious Answer"
+sidebarTitle: "Pre-Task Expansion"
+description: "Pre-Task Expansion Protocol v1 forces AI to surface alternative problem framings before responding — preventing premature collapse to the most obvious solution."
+---
+
+Pre-Task Expansion Protocol v1 is a five-step pre-response ritual that runs before the AI answers any task. Its purpose is to prevent the most common failure in AI-assisted reasoning: collapsing immediately to the most obvious interpretation of a problem and producing a well-formed answer to the wrong question. The protocol does not delay the response — it restructures the path to it, forcing the AI to surface alternative framings, lay them flat without hierarchy, find what belongs together, and only then go deep on what is actually most relevant.
+
+## What It Is
+
+The protocol is a mandatory sequence. It runs before the AI responds to any task where the problem might collapse too quickly, carry unstated ambiguity, or have an obvious answer that feels too easy. The sequence cannot be skipped or compressed.
+
+<Note>
+  This protocol is about **problem framing**, not solution generation. Steps 1–4 operate entirely at the level of how the problem is read. Solutions come after Step 5.
+</Note>
+
+## When to Use It
+
+<CardGroup cols={3}>
+  <Card title="Fast Collapse Risk" icon="bolt">
+    The task has an obvious, direct answer — but "obvious" often means "first framing wins." Use this protocol to check whether the obvious answer is actually right.
+  </Card>
+  <Card title="Unstated Ambiguity" icon="circle-question">
+    The problem statement looks clear on the surface but may carry hidden assumptions about what is actually being asked. The obvious reading might be one of several valid interpretations.
+  </Card>
+  <Card title="Underspecified Tasks" icon="layer-group">
+    The task is vague, high-level, or contains a request that could be satisfied in structurally different ways — not just different implementations of the same shape.
+  </Card>
+</CardGroup>
+
+## The Five Steps
+
+The protocol defines exactly five steps. Each must complete before the next begins.
+
+<Steps>
+  <Step title="OBVIOUS SOLUTION">
+    State the most direct, structural solution to what was asked. **One sentence.** Get it out.
+
+    The purpose of this step is to name the obvious answer explicitly — not to act on it. Making it visible is what allows the next steps to challenge it.
+  </Step>
+  <Step title="ALTERNATIVE READINGS">
+    Before touching solutions, reread the problem. Generate **3 alternative ways this problem could be framed** — not solutions, framings.
+
+    Each alternative framing should make the obvious solution look incomplete or wrong. If none of the three framings challenge the obvious solution, they are not doing their job.
+  </Step>
+  <Step title="LAY FLAT">
+    Put the obvious solution and the 3 alternative framings side by side. **No hierarchy. No preference. No winner yet.**
+
+    This step prevents the obvious solution from carrying invisible weight into the grouping phase. Everything is treated as equally candidate until the next step resolves it.
+  </Step>
+  <Step title="GROUP">
+    Look across what is flat. Find what belongs together. Name the groups.
+
+    Do not force groupings — if something stands alone, let it stand alone. The goal is to find natural structure in the set of framings, not to produce a tidy taxonomy.
+  </Step>
+  <Step title="BUILD DOWN">
+    On the group that is most relevant to the actual task, go deep. This is where the work happens. Everything else stays visible but parked.
+
+    "Parked" means: acknowledged, not discarded, not pursued. It remains available if the direction shifts.
+  </Step>
+</Steps>
+
+Only after this full sequence does the AI respond to the task.
+
+## Why This Works
+
+The protocol separates two operations that AI conflates by default: **problem framing** and **solution generation**. When a task arrives, AI pattern-matches to the most familiar framing and generates a solution for that framing. If the framing is wrong, the solution is wrong — even if it is well-executed.
+
+By forcing ALTERNATIVE READINGS before any solution work, the protocol prevents the first framing from winning by default. By laying everything flat in Step 3, it removes the implicit weight that "obvious" carries. By grouping in Step 4, it finds whether the alternatives cluster around a different core question. By building down in Step 5, it ensures depth goes to what actually matters — not to what arrived first.
+
+## Worked Example
+
+**Task prompt:** *"Help me improve communication on my team."*
+
+<Tabs>
+  <Tab title="Step 1 — OBVIOUS SOLUTION">
+    **Obvious solution:** Set up a regular team meeting cadence with clear agenda templates and action item tracking.
+  </Tab>
+  <Tab title="Step 2 — ALTERNATIVE READINGS">
+    Three alternative framings that make the obvious solution look incomplete or wrong:
+
+    1. **The communication problem is actually a trust problem.** The team does not communicate because people do not trust that information will be used fairly or that speaking up is safe. More meetings make this worse, not better.
+
+    2. **"Communication" is a symptom, not the problem.** The real issue is role ambiguity — people do not know who owns what, so they either over-communicate defensively or avoid communicating at all. Structure before cadence.
+
+    3. **The operator is not a neutral observer.** The person asking may be the source of the communication breakdown — through unclear directives, inconsistent follow-through, or inaccessibility. The improvement target may be the operator's own behavior.
+  </Tab>
+  <Tab title="Step 3 — LAY FLAT">
+    | | What It Points At |
+    |--|--|
+    | Obvious solution | Process and cadence |
+    | Framing 1 | Culture and psychological safety |
+    | Framing 2 | Structural role clarity |
+    | Framing 3 | Operator behavior as cause |
+
+    No hierarchy. No winner. All four sit equally visible.
+  </Tab>
+  <Tab title="Step 4 — GROUP">
+    Two natural groups emerge:
+
+    - **External to the operator:** Process (obvious solution) + Structure (Framing 2) — things the team does or how it is organized
+    - **Implicates the operator:** Trust/safety (Framing 1) + Operator behavior (Framing 3) — things that require examining the operator's own role
+
+    Framing 2 could bridge both groups — role ambiguity might originate in operator decisions.
+  </Tab>
+  <Tab title="Step 5 — BUILD DOWN">
+    The most relevant group for an honest response is the one that implicates the operator — because most "team communication" improvements fail when the root cause is structural or behavioral at the leadership level, not procedural at the team level.
+
+    **Go deep here:** What decisions or behaviors from the operator create the conditions for the communication failure? What would change if role ownership were clarified? What is the actual observable breakdown — missed handoffs, silence in meetings, duplicated work, or something else?
+
+    The obvious solution (meeting cadence) stays visible but parked — it may be appropriate once the deeper structure is understood.
+  </Tab>
+</Tabs>
+
+This is what the protocol produces before the AI gives any response: an expanded view of the problem space, a reason to distrust the obvious answer, and a direction that goes to the actual root rather than the nearest solution.
+
+## What This Is Not
+
+Pre-Task Expansion is not a brainstorming tool and not a stalling mechanism. It runs fast and produces a structured view, not an open-ended exploration. If the obvious answer survives all five steps intact, that is a valid outcome — the protocol confirmed it rather than assumed it.
+
+It is also not the same as System Reading Protocol. Pre-Task Expansion is for reframing an **ambiguous task** before acting on it. System Reading Protocol is for understanding what a **real system** actually does versus what it claims to do. Use Pre-Task Expansion when the problem framing is at risk. Use System Reading when the subject is a real system with observable behavior.

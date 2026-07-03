@@ -1,0 +1,132 @@
+---
+title: "Output for Real Readers Protocol v2: Write for Your Actual Audience"
+sidebarTitle: "Real Readers"
+description: "Output for Real Readers Protocol v2 closes reader, purpose, tone, and language before drafting — so AI never writes for the wrong audience."
+---
+
+The Output for Real Readers Protocol v2 is a structured intake process that ends with a complete, closed brief before any output is produced. Its job is to stop AI from writing for itself — grammatically correct, functionally useless — by forcing every reader, purpose, tone, and language decision to close before a single word of final output is drafted. This protocol is for intake first. If material already exists, it does not define the reader, the purpose, the tone, or the language by default. Intake closes first. Review happens later, against the confirmed brief.
+
+## When to Use It
+
+Use this protocol whenever you are producing any reader-facing material and the real reader, purpose, or language has not been explicitly closed.
+
+<CardGroup cols={2}>
+  <Card title="Guides & Instructions" icon="book-open">
+    Step-by-step content, how-to pages, onboarding text, or any instructional material where the reader's level determines what works.
+  </Card>
+  <Card title="README & Project Text" icon="file-lines">
+    Repository READMEs, project descriptions, and documentation entrypoints where multiple reader types may need different things from the same document.
+  </Card>
+  <Card title="Emails & Messages" icon="envelope">
+    Any communication where tone, relationship, and stakes determine whether the message lands or fails.
+  </Card>
+  <Card title="Forms & Field Labels" icon="rectangle-list">
+    Forms, complaint records, or data collection surfaces where the clerk filling the form is not the same person who designed it.
+  </Card>
+</CardGroup>
+
+<Note>
+  This is not a review protocol for existing material. If you bring existing content into the session, the AI treats it as source material — not as authority for tone, language, or reader assumptions — unless you explicitly confirm otherwise.
+</Note>
+
+## Core Rule: Intake Closes First
+
+The protocol has one governing principle that cannot be bypassed: **an unresolved ambiguity never passes to the next phase.** Every reader, purpose, tone, and language constraint must be closed in intake before drafting begins. Existing wording, even good existing wording, does not settle these questions automatically.
+
+## Classification System
+
+Every answer you give during intake is classified by the AI. You never classify anything yourself. The AI reads your answer, assigns it to the right category, and either moves forward or stops to resolve it.
+
+| Category | What It Is |
+|---|---|
+| **INGEST** | A correct answer that goes directly where it belongs in the brief |
+| **SCOPE** | About the task, not the intake — parked for the drafting phase |
+| **CONSTRAINT** | A limit or rule — moved into explicit constraints immediately |
+| **LATER** | A future idea — parked so it is not lost, not acted on now |
+| **AMBIGUOUS** | Unclear — the AI stops and asks before moving on |
+| **ASSUMPTION** | Taken for granted but not stated — named and confirmed before use |
+| **CONFLICT** | Two answers contradict each other — blocked until resolved |
+
+<Tip>
+  You will never see a list of questions. The AI asks one thing at a time, classifies your answer silently, and moves on only when that answer is resolved. If your answer touches multiple categories, the AI names all of them.
+</Tip>
+
+## Phases Overview
+
+<Steps>
+  <Step title="Phase 1 — Fixed Intake">
+    The core of the protocol. Six areas are covered in conversation order — never presented as a list. Nothing moves forward until each area is closed.
+
+    **WHO** — Who will read or use this output? Primary reader, secondary reader if any, their level (expert, informed, beginner), and the relationship between the output and the reader (formal, peer, service, authority).
+
+    **WHY** — What is the purpose? What should the reader do after reading? What happens if the output fails — low stakes or high?
+
+    **HOW IT SOUNDS** — What tone does this require? Do you have an example that sounds right? How long and how dense should it be?
+
+    **CONSTRAINTS** — Hard limits: format, length, technical environment, legal requirements, things that must never appear.
+
+    **LANGUAGE BOUNDARY** — What language does the real reader naturally use? Which terms are normal for that reader, and which would sound internal, abstract, or machine-like? Preferred vocabulary and forbidden vocabulary are both named explicitly.
+
+    **SECTION SPLIT** — Does the output contain sections with different jobs, different readers, or different technical depth? If yes, where does the document change register, and how technical is each section allowed to be?
+  </Step>
+  <Step title="Phase 2 — Conditional Intake">
+    Entered only if the task requires it. Covers format and channel (where it lands), existing data and mandatory inclusions or exclusions (what it contains), and approval authority (who decides). Existing material is used here only to detect real constraints — it does not override intake.
+  </Step>
+  <Step title="Phase 3 — Summary">
+    When intake is closed, the AI produces a complete summary covering reader, purpose, tone, constraints, language boundary, section split, any conditional blocks that were opened, parked items, open assumptions, and conflicts resolved. The summary is shown to you. You confirm or correct it. The AI updates in place until confirmed. No output is generated until the summary is confirmed.
+  </Step>
+  <Step title="Phase 4 — Output">
+    Output is generated only after Phase 3 is confirmed. The AI writes for the real reader identified in intake. If the brief defines more than one section type, each section is written for its own confirmed reader, purpose, and technical depth. Before finalizing, the AI checks: Is any sentence written in internal system language rather than reader language? Is any wording implementation, rework, process, or architecture meta? Is technical language used only where the brief allows it?
+  </Step>
+</Steps>
+
+## How AI Behaves During Intake
+
+The AI follows the conversation. It does not present a form or a list. It asks one thing at a time.
+
+<Accordion title="When a question risks ambiguity or avoidable rework">
+  For that specific question, the AI provides four things:
+  - What kind of answer is needed
+  - One or more concrete examples of a good answer
+  - Why that information matters
+  - What goes wrong if it is skipped
+
+  This happens selectively — only when the question genuinely risks a wrong assumption or costly rework. It is not applied to every question.
+</Accordion>
+
+<Accordion title="When an answer is ambiguous">
+  The AI stops. It does not assume, does not interpret, and does not move forward. It asks until the answer is clear.
+</Accordion>
+
+<Accordion title="When two answers conflict">
+  The AI blocks. A CONFLICT classification means nothing moves forward until the contradiction is resolved. This is not a warning — it is a hard stop.
+</Accordion>
+
+## Practical Scenario: Writing a Project README
+
+Say you are writing a README for a developer tool and you start the session with the protocol active. Here is what intake looks like for that scenario.
+
+<Tabs>
+  <Tab title="WHO question">
+    The AI asks: who will read this README? It will prompt you to distinguish between the person arriving cold from a search result and the contributor already in the repository. It asks for their level — experienced developer, total beginner, or something between — and the relationship: is this a peer-to-peer document, a product pitch, or a technical reference?
+
+    A good answer: *"Primary reader: a developer who found the project on GitHub and wants to know in 30 seconds if it is worth using. Secondary reader: a contributor who already decided to use it and needs the structure."*
+  </Tab>
+  <Tab title="LANGUAGE BOUNDARY question">
+    After locking the reader, the AI asks which terms are normal for that reader and which would sound like internal system taxonomy. For a developer tool, this often surfaces tensions between how the project team names things internally and how the actual developer audience talks about those things.
+
+    A good answer: *"Use 'config file', not 'runtime surface'. Use 'install', not 'downstream provisioning'. Avoid internal labels unless they appear in the actual CLI output."*
+  </Tab>
+  <Tab title="SECTION SPLIT question">
+    The AI asks whether the README changes register across sections. A README that opens product-facing, moves to technical setup, and ends with a contributor reference has three different audiences and three different jobs. If that split is not named, the whole document collapses into one voice.
+
+    A good answer: *"The opening must be non-technical and product-facing. The setup section can use CLI commands and assume developer context. The contribution section can use repo-specific terminology."*
+  </Tab>
+  <Tab title="Summary before drafting">
+    Before any output is written, the AI produces a complete brief listing every closed decision. You review it, correct anything that is wrong, and confirm. Only then does drafting begin — against the confirmed brief, not against whatever sounded right at the time.
+  </Tab>
+</Tabs>
+
+<Warning>
+  If the intake is skipped or shortcuts are taken, the output will be written for the AI's default reader — which is usually itself. The result is grammatically correct, structurally plausible, and wrong for every actual person who will encounter it.
+</Warning>

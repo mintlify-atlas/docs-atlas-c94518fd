@@ -1,0 +1,233 @@
+---
+title: "GitHub README Framing and Authoring Protocol v2"
+sidebarTitle: "README Framing"
+description: "Derive the correct README from real project evidence, real reader fit, and real job — not from template momentum, vague confidence, or inherited wording."
+---
+
+The GitHub README Framing and Authoring Protocol v2 is a phase-gated working contract for writing, rewriting, restructuring, or materially reframing a repository README. Its purpose is to derive the right README from the real project, the real reader, and the real job the README must perform — not from template momentum, generic GitHub conventions, or inherited wording. Use it whenever you are about to produce or substantially change a README and want the output to be accurate, fitted, and justified rather than complete-looking.
+
+## Core Rule
+
+<Note>
+Build the smallest correct README that accurately represents the real project, fits the real reader, uses the real reader's language, and performs the real job the README needs to do.
+</Note>
+
+## Operating Posture
+
+This protocol is README-specific. It is not a generic output protocol. It exists to help the AI derive the right README from repository truth — not from template momentum, vague confidence, or inherited wording.
+
+Do not assume every repository needs the same README. Do not assume every README should be comprehensive. Do not assume every README should mirror familiar GitHub templates. Do not assume the existing README is correct. Do not let the most visible files alone define the whole repository.
+
+## Interaction Rules
+
+<Info>
+Follow the phases in order. Before writing, close the project model, the README role, the reader model, the language boundary, and the section model. An unresolved ambiguity does not pass to the next phase.
+</Info>
+
+| Rule | Behaviour |
+|------|-----------|
+| Phase order | Follow phases in order; do not skip to drafting, formatting, badges, or polish. |
+| Ambiguity handling | If ambiguity remains and could materially change reader fit, role, claims, structure, language, or next action, stop and ask before proceeding. |
+| Asking questions | Ask one thing at a time. Keep materially distinct ambiguities separate. |
+| Evidence use | Use real evidence from the workspace. Do not invent features, workflows, maturity, stability, support level, or status. |
+| Existing README | Treat as gated material. Do not read it unless operator authorisation is explicitly given. |
+| Optimisation | Optimise for correctness, clarity, fit, orientation value, and reader usefulness — not for completeness. |
+
+## Phases
+
+<Steps>
+
+### Phase 1 — Classify the Project
+
+Determine and report: project name, project type, primary purpose, primary audience, current maturity, primary user or reader, primary public or operational unit, whether the repository is product-facing, developer-facing, research-facing, content-facing, internal-facing, or mixed, and whether the repository is primarily something to use, install, read, adapt, study, deploy, extend, evaluate, or reference.
+
+**Project type taxonomy**
+
+| Type | Description |
+|------|-------------|
+| application | A runnable software application |
+| library | Importable or linkable code for reuse |
+| CLI tool | A command-line interface |
+| framework | An opinionated structure or runtime scaffold |
+| template or starter | A starting point or scaffold |
+| documentation repository | Written documentation as the primary output |
+| content repository | Written, media, or mixed content |
+| research repository | Experimental work, studies, or findings |
+| artifact repository | Compiled or packaged release artefacts |
+| showcase repository | Portfolio or demonstration work |
+| mixed repository | More than one type in meaningful proportion |
+| internal operational repository | Tooling, configs, scripts not intended for public use |
+
+**Primary unit taxonomy**
+
+| Unit | Examples |
+|------|---------|
+| source repository | The repo itself is the artefact |
+| package | npm, PyPI, RubyGems, etc. |
+| CLI | Command-line tool |
+| deployable application | A runnable build or container |
+| documentation surface | Rendered docs |
+| static site | GitHub Pages or similar |
+| content collection | A set of articles, files, or media |
+| research artifact | Papers, notebooks, datasets |
+| reusable template | Starter files, scaffold |
+| portfolio or showcase artifact | Demonstration or portfolio entry |
+
+Stop and ask if classification remains materially ambiguous. Do not proceed with README role selection or section design on unresolved project classification.
+
+### Phase 2 — Inspect the Workspace
+
+Read only enough to close the README decision perimeter. Determine and report: high-level repository structure, manifests and package descriptors, entry points, core modules, executable surfaces, scripts relevant to running or building the project, configuration surfaces, dependency signals, deployment signals, documentation surfaces other than the README, licensing signals, contribution or governance signals, whether the repository appears stable or experimental, whether there are public-facing claims already encoded elsewhere, and whether the repository contains multiple reader surfaces that should not be collapsed into one README voice.
+
+**README gate rule**
+
+<Warning>
+If a README already exists, do not read it in this phase. Do not use it for initial project understanding. Do not treat it as a primary source. Access to the existing README requires explicit operator authorisation. Without authorisation, the existing README remains out of scope.
+</Warning>
+
+Do not compensate for missing evidence by falling back to generic README conventions. If workspace evidence is insufficient to support justified framing, stop and ask.
+
+### Phase 3 — Determine the README Role and Reader Action
+
+Before drafting anything, decide and report what job the README must perform. Close the reader before closing the structure. Do not design a README for a generic GitHub visitor if the real reader is narrower or more specific.
+
+**Possible README roles**
+
+| Role | When to use |
+|------|-------------|
+| orientation surface | Reader needs to understand what the project is |
+| quickstart surface | Reader needs to go from zero to running quickly |
+| usage surface | Reader knows what it is; needs to use it |
+| technical entrypoint | Reader is a developer or integrator |
+| documentation gateway | README routes into a deeper docs tree |
+| installation guide | Primary job is getting it installed |
+| project overview | Broad summary for evaluators or newcomers |
+| reference surface | Lookup-oriented; reader returns repeatedly |
+| portfolio-facing overview | Evaluator or employer audience |
+| research framing surface | Academic or experimental context |
+| adaptation or integration surface | Reader is adapting or embedding the project |
+
+<Note>
+Do not assume every README is mainly a quickstart or a project overview. Do not assume every README should route into a docs tree. Do not let a secondary reader distort the README away from the primary reader.
+</Note>
+
+### Phase 4 — Determine Editorial Posture and Language Boundary
+
+Before defining sections, decide and report how the README should sound and what kind of language it is allowed to use. Tone is not decoration — language is part of reader fit.
+
+Determine and report: whether the README should be technical-first or orientation-first, whether it should be concise, moderate, or expansive, the appropriate tone (sober, practical, explanatory, direct, or mixed), the real reader's natural vocabulary, which terms are normal and clear for that reader, which terms would sound internal or inflated, and any preferred or forbidden wording.
+
+<Warning>
+Do not let tone overstate project maturity, polish, stability, or support. Do not default to internal system taxonomy when plain reader language exists. Do not let editorial polish substitute for unresolved framing.
+</Warning>
+
+### Phase 5 — Design the README Model
+
+Before writing full prose, decide and report the README structure. Determine and report: recommended title form, recommended opening pattern, what belongs above the fold, which sections are required, which are optional, which should be excluded, the order that best fits the README role, which claims are justified, which claims are not justified, and what details should stay in deeper docs rather than the README.
+
+**Possible sections (treat as options, not defaults)**
+
+<Accordion title="Full section list">
+
+| Section | Justification required? |
+|---------|------------------------|
+| title | Always |
+| one-line description | Almost always |
+| project overview | When reader needs orientation |
+| why it exists | When motivation is non-obvious |
+| status | When maturity or stability is a reader concern |
+| features or capabilities | When the feature set is the primary decision signal |
+| installation | When setup is non-trivial or the reader needs it |
+| quickstart | When speed-to-running is the primary job |
+| usage | When usage patterns are complex or non-obvious |
+| examples | When concrete examples aid comprehension |
+| configuration | When configuration is a meaningful reader task |
+| project structure | When structure aids navigation or contribution |
+| architecture | When design decisions affect integration |
+| development | When contributors need a separate on-ramp |
+| limitations | When known limitations affect reader decision |
+| roadmap | When planned work is a meaningful signal |
+| documentation links | When a deeper docs tree exists |
+| contributing | Only if contribution is actively invited and supported |
+| license | When the licence is a meaningful signal for this reader |
+
+</Accordion>
+
+<Note>
+Do not generate section bureaucracy. Do not include common sections just because they are common. If a section is skipped, know why. Prefer the smallest correct structure.
+</Note>
+
+### Phase 6 — Draft the README
+
+Write the README only after the model is defined. Write each section for its actual reader, actual job, and allowed technical depth.
+
+**Drafting rules**
+- Write in plain, direct language.
+- Avoid filler, ceremony, and generic GitHub mood.
+- Start with what the project is and what it does.
+- Make examples, commands, and setup steps accurate and project-real.
+- Make claims proportionate to the actual maturity and scope.
+- Prefer concrete explanation over generic marketing language.
+- Do not let section count substitute for clarity.
+
+<Warning>
+If commands, examples, configuration, installation steps, or environment claims cannot be verified from the workspace, stop and ask before asserting them. Do not use confident wording to hide missing evidence.
+</Warning>
+
+### Phase 7 — Review Against Project Truth and Reader Truth
+
+Before finalising, produce a concise review stating: what the README is trying to do, who it is for, what it foregrounds, what it deliberately keeps out, which project claims it makes, which claims it avoids, which sections were included and why, which sections were excluded and why, and which risks remain.
+
+**Check for**
+- Overstatement of maturity or scope
+- Invented features
+- Generic template drag
+- Missing core orientation
+- Mismatch between tone and project reality
+- Internal or machine-like vocabulary where reader language should be used
+- Setup steps not grounded in the repository
+- Claims not supported by workspace evidence
+
+Do not finalise the README until this review is complete.
+
+### Phase 8 — Optional Existing README Audit (Gated)
+
+<Warning>
+This phase is gated. Only enter if the operator explicitly authorises reading the existing README. If authorisation is granted, read the existing README as material to audit — not as a primary source of truth. Do not let the old README override the project model already established.
+</Warning>
+
+If authorised, determine and report: what the existing README gets right, what it gets wrong, what it overstates, what it understates, what should be preserved, what should be revised, what should be removed, and whether the final result should be a revision, restructuring, or full rewrite.
+
+</Steps>
+
+## What NOT to Invent
+
+<CardGroup cols={2}>
+  <Card title="No invented features" icon="circle-xmark">
+    Do not describe features, workflows, or capabilities that cannot be verified from real workspace evidence.
+  </Card>
+  <Card title="No assumed maturity" icon="circle-xmark">
+    Do not use language that implies stability, production-readiness, or long-term support unless the project clearly justifies it.
+  </Card>
+  <Card title="No template drag" icon="circle-xmark">
+    Do not include sections, badges, or structure just because they are common on GitHub repositories of similar appearance.
+  </Card>
+  <Card title="No unverified commands" icon="circle-xmark">
+    Do not write installation steps, quickstart commands, or configuration examples that have not been verified against the real workspace.
+  </Card>
+</CardGroup>
+
+## Final Safeguards
+
+<Accordion title="Review these before every README run">
+- Never assume every repository needs a comprehensive README.
+- Never assume every README should begin with feature bullets.
+- Never assume every project needs badges.
+- Never assume installation or quickstart belongs in every README.
+- Never assume contribution guidance belongs in the README rather than elsewhere.
+- Never assume the existing README is correct.
+- Never read the existing README without operator authorisation.
+- Never optimise for template completeness.
+- Never use prose quality to hide unresolved ambiguity.
+- Always optimise for a README that is justified, accurate, readable, and fitted to the real project and the real reader.
+</Accordion>

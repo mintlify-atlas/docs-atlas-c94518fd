@@ -1,0 +1,269 @@
+---
+title: "HTML and Website Discovery Set Protocol v1.2"
+sidebarTitle: "Website Discovery"
+description: "Build the machine-readable discovery layer for any static HTML site — llms.txt, sitemap, robots rules, and canonical URLs — after closing required publication variables."
+---
+
+The HTML and Website Discovery Set Protocol v1.2 is a working contract for building the machine-readable discovery layer on top of any static HTML page or website. It provides infrastructure that helps crawlers, bots, LLM readers, and external systems understand a published artifact — without competing with the human-facing page. This protocol applies to static HTML publications in general. If the deployment target is specifically GitHub Pages, see the [GitHub Pages Discovery Set Protocol](/protocols/github-pages-discovery), which handles GitHub Pages path rules, deployment types, and project-site risks as a dedicated scope.
+
+## How This Protocol Differs from the GitHub Pages Discovery Set Protocol
+
+<Info>
+This protocol applies to **any static HTML publication** regardless of hosting provider. The GitHub Pages Discovery Set Protocol applies **only** to artifacts deployed through GitHub Pages. Use this protocol as the general case; use the GitHub Pages one only when the deployment is confirmed as GitHub Pages.
+</Info>
+
+| Dimension | This protocol (v1.2) | GitHub Pages Discovery Set (v1) |
+|-----------|---------------------|--------------------------------|
+| Scope | Any static HTML page or website | GitHub Pages only |
+| Deployment model | Generic static hosting, CDN, subpath, custom domain | GitHub Pages user/org site, project site, custom domain via GitHub Pages |
+| Path risk | Subpath deployments, DOMAIN_ROOT vs SITE_ROOT | PROJECT_SITE root-relative path confusion |
+| Required gate variables | SITE_ROOT, DOMAIN_ROOT, PROJECT_ROOT, CURRENT_PAGE_URL, DISCOVERY_ROOT | OWNER, REPO, PAGES_TYPE, CUSTOM_DOMAIN, SITE_ROOT, DOMAIN_ROOT, DISCOVERY_ROOT |
+
+## Core Principle
+
+<Note>
+Discovery Set is infrastructure. It helps crawlers, bots, LLM readers, and external systems understand the published artifact. It must not compete with the human page.
+</Note>
+
+## Publication Model
+
+This protocol's default model is:
+- A static HTML artifact
+- One absolute publication root
+- One machine-readable discovery root
+- One or more canonical HTML URLs
+- Discovery files that help machines understand the artifact without competing with the human page
+
+Use GitHub Pages only as a special deployment case under this model, not as the default assumption.
+
+## Publication Variables
+
+Before generating any discovery files, close all required variables. If any value is missing, do not guess paths — ask for the missing deployment root or produce placeholders only.
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `SITE_ROOT` | Absolute URL where the published artifact begins | Must be provided |
+| `DOMAIN_ROOT` | Absolute URL of the bare host or domain | Must be provided |
+| `PROJECT_ROOT` | Optional subpath root below `DOMAIN_ROOT` | When present, `SITE_ROOT` usually equals `PROJECT_ROOT` |
+| `CURRENT_PAGE_URL` | Absolute canonical URL of the current HTML page | Must be provided per page |
+| `DISCOVERY_ROOT` | Root where `llms.txt`, `raw-manifest.json`, `sitemap.xml`, and companion files live | Equals `SITE_ROOT` |
+| `LLMS_URL` | Resolved URL to `llms.txt` | `URL_JOIN(DISCOVERY_ROOT, "llms.txt")` |
+| `RAW_MANIFEST_URL` | Resolved URL to `raw-manifest.json` | `URL_JOIN(DISCOVERY_ROOT, "raw-manifest.json")` |
+| `SITEMAP_URL` | Resolved URL to `sitemap.xml` | `URL_JOIN(DISCOVERY_ROOT, "sitemap.xml")` |
+| `ROBOTS_URL` (authoritative) | Resolved URL to authoritative `robots.txt` | `URL_JOIN(DOMAIN_ROOT, "robots.txt")` |
+| `ROBOTS_URL` (companion) | Resolved URL to project-level companion `robots.txt` | `URL_JOIN(DISCOVERY_ROOT, "robots.txt")` |
+
+**Example variable sets**
+
+| Scenario | Variables |
+|----------|-----------|
+| Domain-root site | `SITE_ROOT = https://example.com/` · `DISCOVERY_ROOT = https://example.com/` |
+| Subpath site | `SITE_ROOT = https://example.com/project/` · `DISCOVERY_ROOT = https://example.com/project/` |
+| GitHub Pages project site | `SITE_ROOT = https://USER.github.io/REPO/` · `DISCOVERY_ROOT = https://USER.github.io/REPO/` |
+
+<Warning>
+When constructing URLs, join path segments with exactly one slash. Do not construct discovery URLs through raw string concatenation. Never assume a root-relative discovery path until `SITE_ROOT` and `DOMAIN_ROOT` are closed. Prefer absolute URLs when in doubt.
+</Warning>
+
+## GitHub Pages Special Case
+
+<Warning>
+GitHub Pages project sites are a special risk case. For a GitHub Pages project site, `SITE_ROOT` is usually `https://USER.github.io/REPO/`. Root-relative paths such as `/llms.txt`, `/raw-manifest.json`, or `/sitemap.xml` usually point to `https://USER.github.io/` — not to `https://USER.github.io/REPO/`. For GitHub Pages project sites, use absolute URLs or correct relative paths that preserve `/REPO/`.
+</Warning>
+
+If the deployment target is GitHub Pages, also determine before generating any URL: USER or organisation name, repository name, whether the site is a user/org site or project site, whether a custom domain is active, exact `SITE_ROOT`, exact `DOMAIN_ROOT`, and exact `DISCOVERY_ROOT`.
+
+## Site vs. Page Classification
+
+**Does this published artifact expose more than one canonical HTML URL under the same `SITE_ROOT`?**
+
+| Answer | Type |
+|--------|------|
+| Yes | `SITE` — multiple canonical HTML pages |
+| No | `PAGE` — single canonical HTML URL |
+
+<Info>
+Anchor links, repository links outside `SITE_ROOT`, and links to `llms.txt`, `raw-manifest.json`, `sitemap.xml`, assets, or external pages do not make a `SITE`. Only multiple canonical HTML pages under the same `SITE_ROOT` make a `SITE`.
+</Info>
+
+## What the Discovery Set Includes
+
+<Tabs>
+  <Tab title="TYPE: PAGE">
+    **Definition:** Single canonical HTML URL, usually one `index.html`.
+
+    **HEAD — required elements**
+    - `<title>`
+    - `<meta name="description">`
+    - `<meta name="robots" content="index, follow">`
+    - `<link rel="canonical" href="[CURRENT_PAGE_URL]">`
+    - `<link rel="alternate" type="text/plain" href="[LLMS_URL]" title="LLM-readable index">`
+    - `<link rel="alternate" type="application/json" href="[RAW_MANIFEST_URL]" title="Machine-readable manifest">`
+    - Open Graph: `og:title`, `og:description`, `og:type="website"`, `og:url` (absolute), `og:image` (absolute)
+    - JSON-LD: `SoftwareSourceCode` for repos/protocols/tools/code artefacts; `WebPage` for editorial/static pages
+    - Favicon
+
+    **Discovery root files**
+    - `llms.txt`
+    - `raw-manifest.json`
+    - `sitemap.xml` — single `<url>` entry for `CURRENT_PAGE_URL`
+    - `robots.txt` — required only when `DOMAIN_ROOT` is controlled; optional companion otherwise
+
+    **sitemap.xml minimum**
+    ```xml
+    <?xml version="1.0" encoding="UTF-8"?>
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+      <url>
+        <loc>[CURRENT_PAGE_URL]</loc>
+      </url>
+    </urlset>
+    ```
+
+    **Footer**
+
+    Low-noise machine links for a page at `DISCOVERY_ROOT`:
+    ```html
+    <!-- Discovery Set: low-noise links for crawlers, bots, and LLM readers. -->
+    <div class="machine-links" aria-label="Machine-readable project files">
+      <span>Machine-readable:</span>
+      <a href="llms.txt">llms.txt</a>
+      <a href="raw-manifest.json">manifest</a>
+      <a href="sitemap.xml">sitemap</a>
+    </div>
+    ```
+
+    If `CURRENT_PAGE_URL` is not at `DISCOVERY_ROOT`, use correct relative paths or absolute URLs.
+  </Tab>
+  <Tab title="TYPE: SITE">
+    **Definition:** Multiple canonical HTML URLs under the same `SITE_ROOT`.
+
+    **HEAD — every page**
+    - Page-specific `<title>`
+    - Page-specific `<meta name="description">`
+    - `<meta name="robots" content="index, follow">`
+    - Absolute `<link rel="canonical">` for the current page
+    - `<link rel="alternate">` pointing to `LLMS_URL`
+    - `<link rel="alternate">` pointing to `RAW_MANIFEST_URL`
+    - Page-specific Open Graph tags (absolute `og:url` and `og:image`)
+    - JSON-LD: `WebSite` on index page; optionally `SoftwareSourceCode` as `mainEntity` on index; `WebPage` on subpages
+    - Favicon
+
+    **Discovery root files**
+    - `llms.txt`
+    - `raw-manifest.json`
+    - `sitemap.xml` — one `<url>` entry per canonical HTML page
+    - `robots.txt` — required only when `DOMAIN_ROOT` is controlled; optional companion otherwise
+
+    **sitemap.xml minimum**
+    ```xml
+    <?xml version="1.0" encoding="UTF-8"?>
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+      <url>
+        <loc>https://example.com/</loc>
+      </url>
+      <url>
+        <loc>https://example.com/docs/</loc>
+      </url>
+      <url>
+        <loc>https://example.com/reference/</loc>
+      </url>
+    </urlset>
+    ```
+
+    For subpath deployments, every `<loc>` must preserve the subpath.
+
+    **Footer — every page**
+
+    For the index page at `DISCOVERY_ROOT`, relative links are acceptable. For subpages and subpath deployments, use absolute paths:
+    ```html
+    <a href="https://example.com/llms.txt">llms.txt</a>
+    <a href="https://example.com/raw-manifest.json">manifest</a>
+    <a href="https://example.com/sitemap.xml">sitemap</a>
+    ```
+
+    For subpath deployments, absolute paths must include the subpath:
+    ```html
+    <a href="https://example.com/project/llms.txt">llms.txt</a>
+    <a href="https://example.com/project/raw-manifest.json">manifest</a>
+    <a href="https://example.com/project/sitemap.xml">sitemap</a>
+    ```
+  </Tab>
+</Tabs>
+
+## Discovery File Location Rules
+
+| File | Location | Notes |
+|------|----------|-------|
+| `llms.txt` | `DISCOVERY_ROOT` only | Readable project or site index for LLM/crawler use. Not stored in `assets/`. |
+| `raw-manifest.json` | `DISCOVERY_ROOT` only | Structured machine-readable project or site manifest. Not stored in `assets/`. |
+| `sitemap.xml` | `DISCOVERY_ROOT` only | Lists canonical HTML URLs only. |
+| `robots.txt` (authoritative) | `DOMAIN_ROOT` only | Only when authoritative crawler control is required and domain-root control exists. |
+| `robots.txt` (companion) | `DISCOVERY_ROOT` only | Only as a project-level discovery companion when domain-root control does not exist. |
+
+## Robots Authority Rule
+
+`robots.txt` has a crawler-standard location at `DOMAIN_ROOT/robots.txt`.
+
+- If the deployment controls `DOMAIN_ROOT`, place authoritative `robots.txt` there.
+- If the artifact is published under a subpath and does not control `DOMAIN_ROOT`, a project-level `robots.txt` at `DISCOVERY_ROOT` may be included as a discovery companion — but it must not be treated as authoritative crawler control.
+
+**robots.txt minimum — authoritative domain root**
+```txt
+User-agent: *
+Allow: /
+
+Sitemap: [SITEMAP_URL]
+```
+
+**robots.txt minimum — project-level companion**
+```txt
+User-agent: *
+Allow: /
+
+Sitemap: [SITEMAP_URL]
+```
+
+## Path Rules Summary
+
+| Element | Rule |
+|---------|------|
+| `canonical` | Always absolute URL; equals `CURRENT_PAGE_URL` |
+| `og:url` | Always absolute URL; equals `CURRENT_PAGE_URL` |
+| `og:image` | Always absolute URL |
+| `robots` sitemap entry | Must be absolute URL |
+| `llms.txt` / `raw-manifest.json` in HEAD | Relative allowed at `DISCOVERY_ROOT`; absolute preferred for subpages and subpath deployments |
+| Root-relative paths (`/llms.txt`) | Only allowed when `DISCOVERY_ROOT` equals `DOMAIN_ROOT` |
+
+## JSON-LD Rules
+
+| Schema type | Use when |
+|-------------|---------|
+| `SoftwareSourceCode` | Page represents a repo, protocol, framework, kernel, compiler, developer tool, operational system, or technical artefact |
+| `WebPage` | Page is an article, documentation page, static editorial page, or human-facing explainer without repo/tool identity |
+| `WebSite` | Multiple canonical pages exist under the same `SITE_ROOT` |
+
+<Warning>
+Do not inject generic SEO terms or list concepts that are not actually present in the artifact. Keywords and `about` fields must reflect the real repo, page, site, or artefact.
+</Warning>
+
+## Footer Rules
+
+<Info>
+Footer links must be visible, low-noise, small, non-dominant, machine-oriented, and not part of the main editorial hierarchy. A small machine-readable row in the footer is correct. A large visible manifest block inside the main page is wrong.
+</Info>
+
+## When to Use This Protocol vs. the GitHub Pages Discovery Set Protocol
+
+<CardGroup cols={2}>
+  <Card title="Use this protocol (v1.2)" icon="globe">
+    - Any static site hosted on a CDN, custom server, or shared hosting
+    - Subpath deployments under a domain you control
+    - GitHub Pages user/org sites or project sites when you want the general rules
+    - Any deployment where GitHub-specific path constraints are not the primary concern
+  </Card>
+  <Card title="Use GitHub Pages Discovery Set (v1)" icon="github">
+    - When the deployment is specifically GitHub Pages
+    - When you need explicit handling of USER_OR_ORG_SITE vs PROJECT_SITE vs CUSTOM_DOMAIN_SITE classification
+    - When GitHub Pages path rules and project-site root-relative path confusion are the primary risk
+  </Card>
+</CardGroup>

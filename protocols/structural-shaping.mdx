@@ -1,0 +1,185 @@
+---
+title: "Structural Shaping Protocol v1: Ambiguous Input to Operational Form"
+sidebarTitle: "Structural Shaping"
+description: "Structural Shaping Protocol v1 is a machine-readable behavioral contract that moves ambiguous input through READ_ALIGNMENT, SHAPING, and SYNTHESIS states with strict gate control."
+---
+
+Structural Shaping Protocol v1 is a dense, machine-style behavioral contract for moving ambiguous input into operational form. Unlike conversational protocols, it is written in a key-value format intended for direct AI execution — not human reading. The target reader is the model itself. Every instruction is a constraint on model behavior, and every section governs a different operational surface: state transitions, evidence handling, gate classification, lens activation, artifact production. The protocol is not a guide. It is a contract.
+
+## What It Is and Why the Format Matters
+
+The protocol is typed as `BEHAVIORAL_CONTRACT`, `MODE: AI_ONLY`, `TARGET: MODEL_EXECUTION`. This is intentional. The key-value structure is chosen for mechanical precision — it removes the interpretive slack that natural-language instructions leave open. When the protocol says `FORBIDDEN: premature_synthesis | unsupported_diagnosis | decorative_expansion`, those are hard constraints on what the model may produce, not suggestions.
+
+The format also makes the protocol easier to verify: if a model is behaving correctly, its outputs should be traceable to specific contract rules. If a model is failing, the failure maps to a specific violation.
+
+<Note>
+  When loading this protocol, give it to the AI as-is. Do not paraphrase or summarize it — the precision of the key-value format is what makes the behavioral constraints hold.
+</Note>
+
+## When to Use It
+
+Use Structural Shaping Protocol v1 when:
+
+- Input is structurally ambiguous and needs explicit lenses applied before synthesis begins
+- Multiple interpretations of the problem could lead to genuinely different artifacts
+- You need gate handling, evidence levels, and source-of-truth boundaries to be explicit throughout the session
+- The Idea Shaping Protocol's conversational style is not sufficient and you need tighter machine-readable constraint
+
+## Operating States
+
+The protocol defines exactly three valid states, with a fixed progression order.
+
+<Steps>
+  <Step title="READ_ALIGNMENT">
+    **Allowed:** understand input, separate claims, detect candidate form, expose lens tension, identify gates.
+
+    **Forbidden:** final artifact output.
+
+    This is the entry state. The AI reads the input, activates relevant lenses, and identifies what is structurally ambiguous before touching form or synthesis.
+  </Step>
+  <Step title="SHAPING">
+    **Allowed:** consolidate form, resolve non-blocking friction, surface or close gates, propose reversible defaults, remove overdesign, protect source of truth, prepare artifact path.
+
+    **Forbidden:** final drafting.
+
+    This is where structure is made explicit. Gates are classified, lenses that produce material tension are surfaced, and a stable artifact direction is established.
+  </Step>
+  <Step title="SYNTHESIS">
+    **Allowed:** produce artifact, preserve shaped form, avoid new architecture, keep output clean, local, and operational.
+
+    **Requires:** `OP_APPROVAL=TRUE`
+
+    **Blocked if:** open gates are not `CLOSED`, `RESOLVED`, or `DEFERRED_EXPLICIT`.
+
+    **Note:** implied momentum ≠ approval. A session that is going well does not authorize transition to SYNTHESIS. Explicit operator approval is required.
+  </Step>
+</Steps>
+
+<Warning>
+  State transitions are one-directional. The protocol does not permit looping back to READ_ALIGNMENT from SHAPING or SYNTHESIS unless a real contradiction is detected. Deferred gates must not be treated as closed.
+</Warning>
+
+## Five Horizontal Lenses
+
+The protocol operates five simultaneous lenses across the input. These are not a checklist — they run in parallel, not sequentially. Inactive lenses are silent. A lens only activates when it would change gate status, material friction, artifact direction, evidence level, synthesis prevention, or source-of-truth conflicts.
+
+| Lens | Tracks | Activation Condition |
+|------|--------|----------------------|
+| **IDEA** | Stated intent, claimed problem, hidden assumption, desired outcome, request vs. operational need mismatch | When declared intent may not match what is actually needed |
+| **SHAPE** | Target form: system, protocol, workflow, artifact, product behavior, operating model, or mixed | When object type changes scope, runtime, lifecycle, source of truth, success criteria, or artifact behavior |
+| **IMPLEMENTATION** | Runtime implication, operational friction, validation burden, user discipline, hidden dependency, failure mode | When structural choices carry hidden operational cost |
+| **BEHAVIORAL** | Declared vs. done — observable behavior, history, artifact behavior, resource allocation, repeated exception, pattern over time, opacity | Only when `[OBSERVED \| VALIDATED]` evidence exists. Forbidden: psychological inference, behavioral diagnosis without evidence threshold |
+| **ARTIFACT** | Artifact direction, boundary, allowed content, excluded content, standalone usability, premature output risk | Pre-synthesis: defines direction and boundaries only. Forbidden: final artifact content before SYNTHESIS state |
+
+<Tip>
+  If you notice the AI running lenses as a sequential checklist — completing IDEA, then SHAPE, then IMPLEMENTATION one at a time — the protocol is not being followed correctly. Lenses are simultaneous constraints, not a step-by-step process.
+</Tip>
+
+### Convergence
+
+Convergence is valid when at least two independent active lenses point to the same form. Convergence strength varies:
+
+| Type | Lenses | Strength |
+|------|--------|----------|
+| **Weak** | IDEA + SHAPE (declared intent only) | Low — both draw from what was stated, not observed |
+| **Strong** | SHAPE + IMPLEMENTATION, IMPLEMENTATION + ARTIFACT, BEHAVIORAL + SHAPE (observed), BEHAVIORAL + IMPLEMENTATION (observed friction) | High — at least one lens is grounded in observation |
+| **Unstable** | Any convergence that depends on a single inference repeated across lenses | Not valid — the inference is not independent confirmation |
+
+## Authority Order
+
+When instructions, context, or evidence conflict, the protocol resolves priority by a fixed six-level authority order.
+
+| Priority | Source |
+|----------|--------|
+| 1 | `OP_current_explicit_instruction` — what the operator has explicitly said in the current session |
+| 2 | `current_task_scope` — the defined boundaries of the current task |
+| 3 | `provided_source_or_reference` — documents, files, or sources the operator provided |
+| 4 | `this_protocol` — the structural shaping contract itself |
+| 5 | `prior_session_context` — earlier session history |
+| 6 | `inference` — model reasoning without explicit grounding |
+
+**Rules:**
+- Prior session context must not override the current task
+- Inference must not override OP instruction, source material, gate status, or evidence status
+- If a conflict affects state transition, gate status, source of truth, evidence level, or artifact behavior → `FAIL_CLOSED` and surface the conflict
+
+## Evidence Levels
+
+Claims that affect decisions, gates, declared intent, behavioral diagnosis, or source-of-truth conflicts must be tagged with an evidence level. Labels are internal by default — exposed only when ambiguity, overclaiming, unsupported diagnosis, or false closure prevention requires it.
+
+| Level | Definition |
+|-------|------------|
+| **DECLARED** | Stated by the operator, subject, or source |
+| **INFERRED** | Deduced from structure — not observed, not validated |
+| **OBSERVED** | Visible in behavior, artifact, history, repeated action, exception, resource allocation, or opacity |
+| **VALIDATED** | Confirmed by source, runtime, test, file, constraint, or mechanical check |
+
+**Critical rules:**
+
+- `DECLARED ≠ true by default` — something being stated does not make it structurally accurate
+- `INFERRED ≠ OBSERVED` — deduction from structure is not the same as visible evidence
+- `one OBSERVED instance ≠ pattern` — a single behavioral data point cannot support a behavioral diagnosis
+- `behavioral_evidence NOT required for unimplemented_ideas` — the BEHAVIORAL lens only activates on existing systems with observable behavior
+- `structural_inference MAY guide shaping — MUST_NOT alone finalize_form` — inference can direct investigation, not close gates
+
+## Tension and Convergence
+
+Not all tension between lenses is material. The protocol distinguishes:
+
+| Type | Definition | Response |
+|------|------------|----------|
+| **Material tension** | Lenses pull in different directions AND the difference changes form, constraint, source of truth, runtime, lifecycle, evidence requirement, gate status, or final output | Refine shape; if it changes a real gate, classify it as `ASK`, `PROPOSE`, `DEFER`, or `STOP` |
+| **Noise** | A difference exists between lens readings, but it has no operability change | Cost/benefit decision → continue |
+
+A difference without operability change is noise, not a gate. The protocol is explicit: treat it as noise and keep moving.
+
+## Gate Handling
+
+Before asking the operator about any gate, the AI must classify it. Four classifications are available:
+
+| Classification | When to Use | Response |
+|----------------|-------------|----------|
+| **ASK** | AI cannot choose without changing operator intent, scope, authority, or a non-reversible direction | Ask a closed or bounded question only if the answer changes the next move |
+| **PROPOSE** | One option is cheaper, simpler, safer, or reversible | State the default + operational reason → continue |
+| **DEFER** | Gate is real but not material to the current state | Mark deferred, do not ask, continue until it becomes material |
+| **STOP** | Continuing would produce an artifact that is wrong, unusable, or structurally misleading | Stop, surface the blocking gate only, ask only what unblocks |
+
+<Warning>
+  A deferred gate must never be treated as closed. The protocol marks deferred gates explicitly and preserves them through SYNTHESIS.
+</Warning>
+
+## Failure Conditions
+
+The protocol fails if the AI:
+
+- Builds before reading
+- Diagnoses without behavioral evidence
+- Treats inference as evidence
+- Formalizes from a single instance
+- Runs lenses sequentially instead of in parallel
+- Turns lenses into a checklist
+- Blocks on non-gates
+- Asks about reversible gates instead of proposing defaults
+- Defers a gate and later treats it as closed
+- Accepts a local refactor without checking cross-impact on authority, lens activation, gates, evidence, state transitions, or synthesis discipline
+- Lets general rules retro-shape artifact content without detecting an operational contradiction
+- Creates extra modes beyond the three defined states
+- Produces artifacts before operator approval
+- Hides source-of-truth conflicts
+- Preserves flexibility at the cost of operability
+- Uses elegant language instead of mechanical clarity
+
+## Success Conditions
+
+The protocol succeeds when:
+
+- Input is structurally legible
+- Active lenses converge or expose useful friction
+- Convergence is independently supported (not a single inference repeated)
+- Real gates are few and explicit
+- Gates are classified before asking
+- Meaningful ambiguity fails closed
+- Non-gates resolve without drag
+- Local changes do not distort the operational structure
+- Shaped form is simpler than input without reducing intended behavior
+- Synthesis produces a clean artifact without redesign

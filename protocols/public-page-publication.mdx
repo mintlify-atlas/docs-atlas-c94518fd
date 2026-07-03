@@ -1,0 +1,199 @@
+---
+title: "Public Page Publication Protocol v2: Clean Public Surface"
+sidebarTitle: "Public Page"
+description: "Phase-gated protocol for preparing and publishing a public-facing page — closes page role, audience, metadata, links, and publication risks before any deploy or push."
+---
+
+The Public Page Publication Protocol v2 is a phase-gated working contract for preparing, publishing, or restructuring any public-facing page or site surface. It applies to landing pages, project overview pages, orientation pages, documentation entrypoints, showcases, portfolio surfaces, and GitHub Pages sites. Use it whenever you are about to create, significantly restructure, or publish a public surface and need a disciplined process that closes page role, audience fit, metadata, links, and publication risks before any deploy or push.
+
+## Core Rule
+
+<Note>
+Build the smallest correct public page that matches the real project, the real audience, and the real function of the page.
+</Note>
+
+Do not assume the page is technical documentation. Do not assume the page belongs to a software project. Do not assume every project needs a page. Do not assume every page should behave like a landing page.
+
+## Operating Rules
+
+| # | Rule |
+|---|------|
+| 1 | Follow the phases in order. |
+| 2 | Do not skip directly to visual edits, file generation, branch setup, deployment, or push. |
+| 3 | Before acting, identify the environment, understand what kind of public surface is being created, anticipate likely failure points for that surface, choose the method that avoids them, and then act. |
+| 4 | If a meaningful ambiguity remains and could change public meaning, audience fit, structure, visibility, or publication scope, stop and ask before modifying anything. |
+| 5 | Do not generate a page, subpage, docs surface, navigation structure, assets, or deployment setup unless they are justified by the actual project and the intended public surface. |
+| 6 | Do not optimise for completeness by default. Optimise for correctness, clarity, minimality, and public-surface readiness. |
+
+## Phases
+
+<Steps>
+
+### Phase 1 — Classify the Project and the Page Role
+
+Determine and report: project name, project type, primary purpose, target audience, current maturity, intended public identity, whether a page is justified at all, the role of the page if it exists, and the primary public unit.
+
+**Page role taxonomy**
+
+| Role | When to use |
+|------|-------------|
+| landing page | Primary public impression surface; drives the first-contact decision |
+| project overview | Explains what the project is and does in public terms |
+| orientation page | Helps a reader understand structure and navigate |
+| documentation entrypoint | Routes a reader into a deeper docs surface |
+| showcase | Demonstrates capability, results, or work |
+| portfolio surface | Organises multiple projects or pieces of work |
+| archive | Presents completed, historical, or inactive material |
+| reading surface | Primarily for reading (articles, essays, releases) |
+| distribution surface | Provides access to downloadable or consumable artefacts |
+| support surface | Supports a repository or product (changelog, status, help) |
+
+**Primary public unit taxonomy**
+
+| Unit | Examples |
+|------|---------|
+| repository | The repo itself is the primary public unit |
+| static page | A GitHub Pages or hosted HTML surface |
+| documentation surface | Rendered documentation |
+| artifact collection | A set of downloadable or consumable artefacts |
+| release surface | Tagged releases or versioned assets |
+| portfolio entry | A single project in a portfolio |
+| institutional or informational page | About, contact, organisational identity |
+
+**Questions to close in this phase**
+- What is this project in public terms?
+- What should a visitor understand within the first seconds?
+- What should a visitor do next?
+- What is the page's primary message and supporting message?
+- Is the page the primary public surface or a supporting surface?
+- What belongs in the page? What explicitly does not?
+
+<Warning>
+Stop and ask if classification remains materially ambiguous. Use real evidence from the workspace — do not assume a standard software model.
+</Warning>
+
+### Phase 2 — Analyse the Source Surface
+
+Inspect the workspace enough to make sound page-publication decisions. Determine and report: current semantic HTML structure, whether DOM order matches reading order, whether the page remains understandable before CSS is applied, whether HTML5 semantic elements are used appropriately, heading hierarchy coherence, layout dependencies (fixed widths, absolute positioning, z-index layering), overflow risks, JavaScript presence and justification, external CSS library or framework presence and justification, accessibility baseline signals, SEO metadata presence, current public-facing content, entry files, internal and external links, visual identity signals, assets, metadata, favicon and social preview signals, whether the page is isolated or entangled with non-page content, and whether a published page already exists.
+
+<Note>
+Do not generate files in this phase. Read only enough to close the public-surface decision perimeter.
+</Note>
+
+### Phase 3 — Run the Public-Surface Risk Audit
+
+Check and report: sensitive or private content that should not appear on the page, internal-only notes or drafts, assets with unclear licence or attribution status, content that may not fit the intended public audience, links that expose unfinished or unintended surfaces, broken or stale internal links the page depends on, linked external surfaces that are unready or incoherent with the intended public surface, content that misrepresents project status or maturity, stale or aspirational claims presented as current public reality, structural mixing between page content and repository-only content, and technical deployment risks.
+
+<Warning>
+If publication-blocking issues are found, stop and provide remediation steps before continuing.
+</Warning>
+
+**Publication-blocking issues** (treat as blocking unless explicitly justified):
+- Uncontrolled horizontal page scroll
+- Broken responsive behaviour on mobile or desktop
+- Overlapping content at normal viewport sizes
+- Invalid or non-standard HTML used as structure
+- Essential content generated only through CSS pseudo-elements
+- Public-facing page without a coherent h1/title relationship
+- Public-facing page with materially missing metadata
+- JavaScript required for basic reading of static content
+- Visual structure that misrepresents the page's actual public role
+
+**External-link stop rule:** Do not publish a page that points users into broken, abandoned, contradictory, or premature external surfaces. Do not publish a page that creates a false sense of completeness through broken or misleading internal navigation.
+
+### Phase 4 — Design the Public Page Model
+
+Before generating or editing files, decide and report: the semantic HTML5 skeleton of the page, logical DOM order, heading hierarchy, the responsive model, whether layout should use normal flow, flex, grid, or a combination, spacing scale, maximum content width strategy, decorative background strategy, whether JavaScript is needed at all, whether any external CSS library or framework is justified, the accessibility baseline, the SEO baseline, the role and content categories of the page, what the visitor should see first, the primary and supporting messages, the next action if any, whether the page should be single-surface or multi-page, where the page source should live, what deployment model applies, and what level of visual identity is justified.
+
+**Visual identity guidance**
+
+| Level | When to use |
+|-------|-------------|
+| Minimal identity | Page is primarily functional, referential, internal-adjacent, temporary, or low-maintenance |
+| Coherent identity | Page should feel intentional and project-specific without requiring a full brand system |
+| Strong branded identity | Page is a flagship public surface, showcase, portfolio-facing surface, or primary discovery surface |
+
+<Warning>
+Identity containment rule: if the project does not yet have stable identity signals, do not invent a strong branded layer. Do not let the page look more resolved, formalised, or mature than the actual project.
+</Warning>
+
+**Phase 4 rules**
+- Do not generate extra sections by default
+- Do not generate multi-page structure by default
+- Do not generate decorative assets by default
+- Do not generate interactivity by default
+- Do not let visual ambition outrun project identity
+- Prefer the smallest correct public surface
+
+### Phase 5 — Define the Minimum Page Package
+
+Generate only the elements justified by the page model. Possible elements: page entry file, stylesheet, script, favicon, social/share preview image, title, description, canonical link, navigation, footer, public links, and minimal supporting assets.
+
+**Generation rules**
+- Build semantic HTML before writing CSS
+- Keep DOM order aligned with reading order
+- Use HTML5 semantic elements where appropriate
+- Keep heading hierarchy coherent
+- Separate content structure from visual decoration
+- Use CSS backgrounds instead of empty background elements where possible
+- Use `::before` and `::after` only for non-essential decoration
+- Define a spacing scale before applying margins, padding, and gaps
+- Use flex for simple one-dimensional layouts; use grid only when two-dimensional layout is needed
+- Avoid fixed widths and heights unless explicitly justified
+- Prevent uncontrolled horizontal scroll
+- Add JavaScript only for justified behaviour
+- Add external CSS libraries or frameworks only if justified by the page model
+- If an element is skipped, state why
+
+### Phase 6 — Review Before Any Publication Action
+
+Before committing, deploying, configuring a page source, or pushing, produce a concise review covering: semantic HTML structure and coherence, DOM order, whether CSS is only handling presentation (not compensating for wrong structure), responsive behaviour across relevant viewport sizes, absence of horizontal scroll, absence of overflow or container escape, decorative layer implementation, JavaScript justification and scoping, accessibility baseline, SEO metadata presence, what the page is for, what it includes and excludes, what public claims it makes, which files were added or modified, where the page source will live, which decisions are frozen, which still require confirmation, and which risks remain.
+
+<Warning>
+Do not commit, deploy, configure, or push until this review is complete and the page package is confirmed.
+</Warning>
+
+### Phase 7 — Execute Publication
+
+After confirmation, perform the minimum clean publication sequence required by the environment. Possible actions: isolate the page source if needed, create or update the page surface, execute the publication sequence required by the actual deployment model, stage and commit files intentionally, push the page source, configure the page source location, publish metadata and page identity elements, and verify the live public surface.
+
+**Possible deployment models**
+- Source-based deployment
+- Artifact-based deployment
+- Platform-managed page hosting
+- Externally hosted static deployment
+
+### Phase 8 — Final Post-Publication Checklist
+
+After publication, produce a checklist of only the relevant remaining manual tasks. Possible items: verify semantic structure in the rendered page, verify logical reading order, verify heading hierarchy, verify no unintended horizontal scroll, verify responsive behaviour by resizing the viewport, verify no content overlaps at normal viewport sizes, verify that media and wide elements stay inside their containers, verify that decorative layers do not interfere with reading, verify that JavaScript is not required for basic reading, verify keyboard navigation, verify visible focus states, verify basic contrast readability, verify alt text where images carry meaning, verify live and mobile rendering, verify title and description, verify share preview, verify favicon, verify links, and confirm that excluded material stayed excluded.
+
+</Steps>
+
+## What This Protocol Is NOT For
+
+<CardGroup cols={2}>
+  <Card title="Not for all projects" icon="circle-xmark">
+    Never assume every project needs a public page. A repository and a page do not have the same publication model.
+  </Card>
+  <Card title="Not always a landing page" icon="circle-xmark">
+    Never assume every page is a landing page, or that every public surface should optimise for conversion or visual impact.
+  </Card>
+  <Card title="Not for maximum surface area" icon="circle-xmark">
+    Never optimise for maximum surface area. Do not generate extra sections, subpages, or navigation structure by default.
+  </Card>
+  <Card title="Not a software assumption" icon="circle-xmark">
+    Never assume this is a software project. Do not assume the page should contain all public project material or look like a typical open-source project page.
+  </Card>
+</CardGroup>
+
+## Final Safeguards
+
+<Accordion title="Review these before every public page run">
+- Never assume every project needs a public page.
+- Never assume every page is a landing page.
+- Never assume the page should contain all public project material.
+- Never assume the page belongs inside the main project surface.
+- Never assume a repository and a page have the same publication model.
+- Never optimise for maximum surface area.
+- Always optimise for a clean, justified, publication-ready public surface.
+</Accordion>

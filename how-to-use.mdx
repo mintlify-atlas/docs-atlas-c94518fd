@@ -1,0 +1,48 @@
+---
+title: "How to Use AI Protocol Kit in an AI Session"
+sidebarTitle: "How to Use"
+description: "Learn how to select, load, and apply an AI Protocol Kit behavioral contract in three steps — without stacking, without over-engineering."
+---
+
+Using a protocol is deliberately simple: pick the one that matches the failure you want to prevent, paste it into the AI context before the task starts, and then provide the material the protocol needs to work with. The protocol takes it from there — asking questions, holding gates, separating evidence from inference, and controlling what gets produced and when. You do not need to engineer the session. The contract does that work.
+
+## Loading and running a protocol
+
+<Steps>
+  <Step title="Pick the protocol closest to the actual job">
+    Do not pick by name. Pick by the **failure mode you want to prevent**. Ask what typically goes wrong in this kind of task — premature answers, wrong reader fit, evidence drift, publication without review — then match that to the protocol that addresses it directly. Use the [Protocol Map](/protocol-map) if you are unsure which one applies.
+  </Step>
+  <Step title="Paste or upload the protocol into the AI context">
+    Before the AI begins any execution, the full protocol text must be in context. Paste it directly into the conversation, upload the markdown file, or load it via a system prompt — whichever method your AI tool supports. The protocol must be loaded **before** you describe the task, not after. Loading it afterward gives the AI a chance to interpret your task without the behavioral contract in place.
+  </Step>
+  <Step title="Provide the target material">
+    Hand the AI the thing it needs to work on. This could be a rough idea, a set of files, a repository snapshot, a public page, a README draft, a bug report, a constraint list, or anything else the protocol is designed to process. Do not pre-process or summarize the material unless the protocol instructs you to — raw input gives the AI more to work with and reduces the chance of introducing your own framing before the protocol's scoping questions run.
+  </Step>
+  <Step title="Let the protocol control the workflow">
+    Once the material is provided, the protocol drives the session. It will ask scoping questions, hold gates before proceeding, flag assumptions, separate findings from inferences, request confirmation before irreversible actions, and define what the final output must contain. Your role during execution is to answer the protocol's questions accurately — not to prompt the AI toward the answer you expect.
+  </Step>
+</Steps>
+
+## What not to do
+
+The most common ways protocols fail are not technical — they are behavioral. These are the patterns worth avoiding.
+
+**Do not stack protocols casually.** Running two protocols in the same session without a clear role split creates conflicting behavioral instructions. Each protocol has its own gates, stop conditions, and output contracts. If they conflict, the AI will either ignore one or blend them in ways neither intended. The default is one protocol per task. Stack only when one protocol governs the session and a second governs a distinct artifact — and even then, be explicit about which protocol holds authority at each stage.
+
+**Do not run two protocols without a clear role split.** If you do need two protocols, define the boundary before you start: which protocol controls which phase, which output, which decision. Do not let that boundary be implied or negotiated mid-session.
+
+**Do not treat the protocol as a checklist.** A protocol is not a form to fill in. It is an active behavioral contract. If you skim it for checkboxes and then provide answers that satisfy the form without genuinely engaging the questions, the protocol's gates become theater. The value is in what the scoping questions surface — not in the fact that they were answered.
+
+<Tip>
+  **Default rule: one protocol per task.** Unless you have a specific, explicit reason to stack, one protocol is always the right starting point. The kit is designed so that individual protocols cover their failure modes completely — stacking is for genuinely compound tasks, not for hedging.
+</Tip>
+
+## Choosing by failure mode
+
+If you are not sure which protocol to use, start with the failure mode rather than browsing protocol names. The [Protocol Map](/protocol-map) organizes all 17 protocols by what can go wrong — ambiguity, wrong output shape, evidence loss, publication errors, or session drift — and tells you which protocol addresses each failure directly.
+
+Protocols also appear in more than one lane on the map. System Reading Protocol, for example, is relevant both for reasoning tasks and for inspection tasks. That overlap is intentional. Use the lane that matches your current situation, not the lane where the protocol appears most often.
+
+<Note>
+  Protocols do not override safety, legality, privacy, data integrity, or tool limits. If any protocol instruction conflicts with those higher-priority constraints, the protocol instruction does not apply. The kit is designed for practical workflow structure — not as a mechanism for bypassing any restriction your AI tool, platform, or organization enforces.
+</Note>

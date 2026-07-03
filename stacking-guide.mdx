@@ -1,0 +1,102 @@
+---
+title: "Protocol Stacking Guide: When and How to Combine Protocols"
+sidebarTitle: "Stacking Guide"
+description: "Learn when combining AI Protocol Kit protocols is justified, which stacks are tested, and why the default rule is always to use the smallest set that fits the task."
+---
+
+The default rule is **one protocol**. Every protocol in this kit is a complete behavioral contract on its own — it defines how the AI should approach a task, what to check, when to stop, and what counts as acceptable output. Stacking is the exception, not the starting point. Stack only when one protocol controls the session and another controls a distinct artifact or publication target, and when there is genuinely no single protocol that covers both scopes.
+
+## Why stacking is restricted
+
+Each protocol is a full behavioral contract. When you stack two, both run simultaneously inside the same session. That creates real risk:
+
+- **Authority conflicts.** Two protocols may give different instructions about who or what governs a decision. When both are active, there is no clear tie-breaker.
+- **Gate overlaps.** Multiple protocols may include review gates or stop conditions on the same artifact. Redundant gates slow work down and can produce contradictory verdicts.
+- **Mode contradictions.** One protocol may require expansive, exploratory behavior while another requires tight constraint enforcement. Running both at once forces the AI to satisfy incompatible postures.
+
+<Warning>
+  Stacking is not a way to get "more thoroughness." It is a way to introduce competing instructions into the same session. The overhead is real and must be managed deliberately.
+</Warning>
+
+## When stacking IS justified
+
+Stacking is justified when the two (or more) protocols have **distinct, non-overlapping scopes** — typically when one governs session behavior and another governs a specific artifact or publication target. If you can point to a clear boundary between what each protocol is responsible for, and confirm they do not issue instructions about the same things, the stack may be warranted.
+
+<Note>
+  The test is not "would this protocol be useful here?" The test is "does this protocol govern something the other protocol does not govern at all?" If the scopes overlap, use the single protocol that covers the dominant concern.
+</Note>
+
+## The five minimal stacks
+
+The following stacks are tested and drawn directly from real workflows. Each has an explicit rationale. Do not extend or remix them without re-evaluating for scope overlap.
+
+<AccordionGroup>
+  <Accordion title="Stack 1: Publish a GitHub repository cleanly">
+    **Rationale:** The Publication Preparation Protocol governs the repository as a whole — classification, workspace audit, file decisions, GitHub feature choices, and pre-push confirmation. The README Framing Protocol governs a single artifact: the README file. These are non-overlapping scopes. The Badge/Telemetry Protocol is conditional — add it only if badges, counters, or analytics checks are actually needed; it is a third scope that does not interfere with the first two.
+
+    **Ordered protocol list:**
+
+    1. [GitHub Repository Publication Preparation Protocol v2](/protocols/github-repository-publication) — governs the full repository publication workflow
+    2. [GitHub README Framing and Authoring Protocol v2](/protocols/github-readme-framing) — governs the README artifact specifically
+    3. [GitHub Badge, Telemetry & Counter Protocol v1.2.3](/protocols/github-badge-telemetry) — add only if badges, counters, analytics, or validation checks are actually needed
+  </Accordion>
+
+  <Accordion title="Stack 2: Prepare a public project page or GitHub Pages surface">
+    **Rationale:** The Public Page Publication Protocol governs the page's role, audience, metadata, accessibility, links, and publication risks. The HTML Page & Tool Briefing Protocol governs the implementation brief — a different artifact and scope. The Discovery Set protocols (GitHub Pages or general HTML/Website) govern machine-readable discoverability files and canonical URL hygiene, which is a third distinct scope. Run the discovery protocol before publishing, not after.
+
+    **Ordered protocol list:**
+
+    1. [Public Page Publication Protocol v2](/protocols/public-page-publication) — governs the page publication workflow
+    2. [HTML Page & Tool Briefing Protocol v2](/protocols/html-page-and-tool-briefing) — add only if implementation briefing is needed
+    3. [GitHub Pages Discovery Set Protocol v1](/protocols/github-pages-discovery) **or** [HTML and Website Discovery Set Protocol v1.2](/protocols/html-website-discovery) — run before publishing to close discovery and metadata gaps
+  </Accordion>
+
+  <Accordion title="Stack 3: Review messy findings without losing evidence">
+    **Rationale:** The Field Findings & Bugs Protocol governs evidence capture — how findings are recorded, separated from inference, and structured as artifacts. PHI-Lens governs reasoning under constraint conflict — it is a gate for output, not a capture mechanism. The scopes are distinct: one manages what is found, the other manages how competing constraints are resolved before something is stated. PHI-Lens is conditional — add it only when constraints genuinely conflict and a flat compromise would produce a misleading result.
+
+    **Ordered protocol list:**
+
+    1. [Field Findings & Bugs Protocol v2](/protocols/field-findings-and-bugs) — governs evidence capture and findings structure
+    2. [PHI-Lens Protocol v4.a](/protocols/phi-lens) — add only if constraints conflict and a flat compromise would be misleading
+  </Accordion>
+
+  <Accordion title="Stack 4: Reason through a hard, ambiguous, or constraint-heavy task">
+    **Rationale:** Pre-Task Expansion stops the AI from collapsing to the obvious answer before the task is fully understood. System Reading shifts attention from declared intent to observable system behavior — a different epistemic posture. PHI-Lens provides an explicit constraint gate before output. The three have sequential, non-overlapping roles: expansion before interpretation, interpretation before output gate. Each is conditional: add only the layers the task actually requires.
+
+    **Ordered protocol list:**
+
+    1. [Pre-Task Expansion Protocol v1](/protocols/pre-task-expansion) — add if the task may collapse too quickly into the obvious answer
+    2. [System Reading Protocol v0.2](/protocols/system-reading) — add if real system behavior matters more than declared intent
+    3. [PHI-Lens Protocol v4.a](/protocols/phi-lens) — add only if constraints interact and output needs an explicit gate
+  </Accordion>
+
+  <Accordion title="Stack 5: Run a complex AI-assisted repo or file session">
+    **Rationale:** The GPT Agentic Posture Contract governs how the AI operates across files, tools, and repo state — it is the session posture layer. Triad AI Orchestration adds executor/reviewer separation when a single AI instance should not approve its own work. Field Findings & Bugs adds evidence capture when findings must be preserved as structured artifacts, not just noted in chat. Each protocol governs a different layer of the session: posture, review architecture, and evidence handling.
+
+    **Ordered protocol list:**
+
+    1. [GPT Agentic Posture Contract](/protocols/gpt-agentic-posture) — governs AI session posture across files and tools
+    2. [Triad AI Orchestration Protocol v3](/protocols/triad-ai-orchestration) — add only if executor/reviewer separation is needed
+    3. [Field Findings & Bugs Protocol v2](/protocols/field-findings-and-bugs) — add if findings must be captured as evidence, not just observed
+  </Accordion>
+</AccordionGroup>
+
+## Anti-patterns
+
+These are the most common stacking mistakes. Each produces a session that is harder to run, not better governed.
+
+<CardGroup cols={1}>
+  <Card title="Casual stacking" icon="layer-group">
+    Adding a second protocol because it "seems relevant" or because the task touches topics the second protocol mentions. Relevance is not scope separation. If both protocols would issue instructions about the same decision, you have a conflict, not coverage.
+  </Card>
+  <Card title="Stacking for completeness" icon="list-check">
+    Running multiple protocols to feel thorough, or to ensure "nothing is missed." Protocols are not checklists you accumulate — they are behavioral contracts that govern how work proceeds. More contracts running simultaneously means more potential for contradiction.
+  </Card>
+  <Card title="Stacking overlapping protocols" icon="triangle-exclamation">
+    Combining two protocols that both govern the same artifact, gate, or decision type. For example, running two different reasoning protocols on the same task, or two publication protocols on the same repository surface. Overlapping scopes produce authority conflicts that cannot be resolved by the AI during execution.
+  </Card>
+</CardGroup>
+
+<Tip>
+  If you are unsure whether to stack, use the smaller set. Stacking adds complexity that must be managed across the entire session. The overhead is only justified when the scope genuinely cannot be served by one protocol — when you can name two separate artifacts or session layers, each owned exclusively by a different protocol, with no instruction overlap between them.
+</Tip>

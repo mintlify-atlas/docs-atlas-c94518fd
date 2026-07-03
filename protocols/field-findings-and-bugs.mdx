@@ -1,0 +1,179 @@
+---
+title: "Field Findings & Bugs Protocol v2: Capture Without Losing Evidence"
+sidebarTitle: "Field Findings"
+description: "Field Findings & Bugs Protocol v2 governs capture, labeling, and promotion of findings — preventing premature clustering and false generalization."
+---
+
+The Field Findings & Bugs Protocol v2 governs how an LLM captures, holds, compares, and promotes findings and bugs during live review or analytical work. It is not a patch spec, not a task plan, and not a summary style guide. Its job is to prevent weak findings, weak bug records, premature clustering, false generalization, and convergence by momentum — the pattern where an AI starts from the first salient point and builds structure around it before the rest of the field is open.
+
+## Core Distinction: Registration ≠ Promotion
+
+A finding or bug may be recorded early. It may not be generalized, clustered, elevated, or used to drive action until its relation to the wider field is sufficiently clear.
+
+This distinction is the foundation of the entire protocol. Registration is a low-threshold act — it preserves a local observation. Promotion is a high-threshold act — it authorizes action, clustering, rule extraction, or structural conclusion. The two are never collapsed into one step.
+
+<Note>
+  A findings file is a disciplined holding field for live analytical pressure. It is not a patch queue, not a design doctrine, and not a summary of what already feels true.
+</Note>
+
+## Operating Posture
+
+Do not start from the first salient point and build structure immediately. Open the field horizontally first. Keep the active lenses live at the same time. If they pull in opposite directions, treat that tension as information. Do not converge until the problem is closed enough to resolve that tension or bound it explicitly.
+
+## Active Lenses
+
+All eight lenses operate simultaneously during review. If they produce tension, that tension is preserved — not resolved by averaging or ignoring the minority signal.
+
+| Lens | What It Does |
+|---|---|
+| **Mechanism beats heuristic** | Prefer an explanation of how something breaks over a pattern-matched label |
+| **Privative but convergent** | Identify what is absent or missing; converge only when the field is sufficiently complete |
+| **Miller constraint** | Keep the active working set bounded; do not expand scope without naming it |
+| **Fail-closed on meaningful ambiguity** | If an ambiguity materially changes what should happen next, keep the finding open — do not smooth over it |
+| **No formalization from single instance** | A single finding may stand as a local case; it may not become a rule, family, or pattern by itself |
+| **Simplicity before meta-machinery** | Do not introduce structural complexity to organize findings that could remain flat |
+| **The task is a point, the system is the volume** | Any local finding exists inside a larger system; do not treat the surface as the whole |
+| **Local surface ≠ local consequence** | A finding on a visible surface may have consequences far from where it appears |
+
+## Protocol Rules
+
+<Steps>
+  <Step title="Close the object before capture">
+    Before recording a finding, identify the target object, the active surface, the current scope, and the authority frame. If these are not closed enough, record the uncertainty before recording the finding itself.
+  </Step>
+  <Step title="Registration threshold">
+    A finding may be registered when all three of the following are true:
+    - It has a surface that can be pointed to
+    - It is at least partly verifiable in the live object or live evidence base
+    - It can stand as a local point without pretending that wider relations are already known
+  </Step>
+  <Step title="Epistemic labeling is mandatory">
+    Every finding must explicitly separate its epistemic state. Do not write inferred or hypothetical states as if they were verified.
+
+    | State | Definition |
+    |---|---|
+    | **Verified** | Directly observed in the live object or evidence base; can be pointed to without inference |
+    | **Inferred** | Reasoned from observable evidence; the reasoning chain is explicit and bounded |
+    | **Hypothetical** | Plausible given available evidence but not yet grounded in direct observation or closed inference |
+  </Step>
+  <Step title="Registration does not authorize promotion">
+    Recording a finding does not yet authorize any of the following: clustering, generalization, rule extraction, sprint selection, patch recommendation, or structural conclusion.
+  </Step>
+  <Step title="Horizontal pass before promotion">
+    Before promoting any finding, reopen the field horizontally. Check for relations, tensions, dependencies, exclusions, collisions, false groupings, and hidden asymmetries. Do not promote from an isolated point if its wider relation is still unknown and could change its meaning.
+  </Step>
+  <Step title="No formalization from single instance">
+    A single finding may stand as a local case. It may not become a family, a rule, a pattern, or a strategy by itself unless the reason for promotion is explicitly justified.
+  </Step>
+  <Step title="Impact classification">
+    Every finding must state whether its consequence currently appears: local / bounded; corridor-level / wider than local surface; or not yet closed.
+  </Step>
+  <Step title="Relevance threshold">
+    A finding should not be kept alive merely because it sounds plausible or elegant. It must have at least one of: an operational consequence; a structural consequence; or an unresolved tension that could change a decision, patch, or recommendation.
+  </Step>
+  <Step title="Fail-closed capture">
+    If a finding depends on an ambiguity that materially changes what should happen next, do not smooth over it. Mark the ambiguity and keep the finding open.
+  </Step>
+  <Step title="Promotion threshold">
+    A finding may be promoted only when at least one of the following is true: it invalidates other findings; it orders other findings; it opens or closes a corridor; it changes the expected action; or it changes the recommendation boundary.
+  </Step>
+  <Step title="Compression rule">
+    Do not multiply findings that collapse into the same governing issue. Fuse vertically only after the relation is clear. Until then, keep them separate and honestly bounded.
+  </Step>
+  <Step title="Output discipline">
+    Each finding record must close at least: ID, surface, epistemic state, impact, boundaries, relations, and operational state.
+  </Step>
+</Steps>
+
+## Operational States
+
+Every finding in the holding field carries one of four states at any time.
+
+| State | When to Use It |
+|---|---|
+| **Open** | Registered, not yet fully bounded or ready for promotion review |
+| **Bounded** | Relations, impact, and limits are clear; standing as a local point without wider claims |
+| **Deferred** | Acknowledged, not currently actionable, explicitly parked |
+| **Closed** | Resolved, promoted, invalidated, or confirmed out of scope |
+
+<Tip>
+  If a finding remains ambiguous but does not currently change action, recommendation, or scope — register it, bound it, and do not force convergence. The finding has a home in the field without requiring resolution.
+</Tip>
+
+## Recommended Record Shape
+
+Every registered finding should close the following fields:
+
+```
+ID:
+Surface:
+Verified:
+Inferred:
+Hypothetical:
+Impact:
+Boundaries:
+Relations:
+Operational state:
+Next review need:
+```
+
+## Failure Conditions
+
+This protocol is designed to prevent a specific set of failure modes. When any of the following appears, the protocol has been violated.
+
+<CardGroup cols={2}>
+  <Card title="Registering vibes as findings" icon="triangle-exclamation">
+    A finding that has no surface, cannot be pointed to, and is not partly verifiable does not meet the registration threshold. It is an impression, not a finding.
+  </Card>
+  <Card title="Treating inferred states as verified" icon="triangle-exclamation">
+    Epistemic labeling is mandatory. Writing "the system does X" when the actual state is "the system appears to do X based on Y" collapses the distinction the protocol exists to protect.
+  </Card>
+  <Card title="Clustering too early" icon="triangle-exclamation">
+    Grouping findings before their relations are clear produces false families. Two findings that appear related may belong to different governing issues — or may be in direct tension.
+  </Card>
+  <Card title="Promoting single cases into rules" icon="triangle-exclamation">
+    One instance of a pattern is a local case. It is not a rule, a family, or a strategy. Promotion from a single instance requires explicit justification.
+  </Card>
+  <Card title="Widening scope without naming it" icon="triangle-exclamation">
+    If the review scope expands during analysis, that expansion must be named. Silent scope expansion is a form of converging from momentum.
+  </Card>
+  <Card title="Converging from momentum" icon="triangle-exclamation">
+    Building structure around the first salient finding before the field is open is convergence from momentum, not from evidence. The horizontal pass is not optional.
+  </Card>
+  <Card title="Turning findings into a patch plan" icon="triangle-exclamation">
+    A findings file becomes a patch queue when promotion decisions are made before the promotion threshold is met. The file holds findings — it does not make decisions.
+  </Card>
+  <Card title="Turning findings into ideology" icon="triangle-exclamation">
+    When a cluster of findings begins to confirm a pre-existing view rather than update it, the file has stopped functioning as a holding field and started functioning as a justification engine.
+  </Card>
+</CardGroup>
+
+## Practical Example: Reviewing a Repository for Publication Issues
+
+Say you are reviewing a repository before making it public and you find a file that contains what appears to be a hardcoded API key.
+
+<Tabs>
+  <Tab title="Correctly labeled finding">
+    **ID:** F-001  
+    **Surface:** `config/settings.py`, line 42  
+    **Verified:** A string matching the pattern of a third-party service API key is present in the file.  
+    **Inferred:** The key is likely live — the service name matches a dependency in `requirements.txt` and the variable name is `API_KEY` not `EXAMPLE_API_KEY`.  
+    **Hypothetical:** The key may be rotated or already expired. Unknown without checking the service dashboard.  
+    **Impact:** Not yet closed — if the key is live and the repository goes public, the key is exposed. If it is already expired or a placeholder, there is no active risk.  
+    **Boundaries:** Finding is local to this file and this key. No other credentials have been reviewed yet.  
+    **Relations:** None established yet — horizontal pass not yet run.  
+    **Operational state:** Open  
+    **Next review need:** Verify whether the key is live before determining impact classification.
+
+    This finding is correctly bounded. It makes no claim about whether other files have similar issues, whether this is a pattern, or whether the repository should be blocked from publication. It holds the evidence without promoting it.
+  </Tab>
+  <Tab title="Premature generalization">
+    *"The repository has a credential management problem. Multiple configuration files likely contain hardcoded secrets. The developer does not appear to follow security best practices. Recommendation: full credential audit and policy documentation before publication."*
+
+    This violates the protocol in multiple ways: one surface was checked; no horizontal pass was run; inferred and hypothetical states are presented as verified; a single instance has been promoted to a pattern; and a patch recommendation has been issued before the promotion threshold was met. Every sentence after the first verified observation is unregistered promotion.
+  </Tab>
+</Tabs>
+
+<Warning>
+  The distance between a correctly labeled finding and a premature generalization is not a matter of caution or style. It is a structural distinction that determines whether the findings file can be trusted as evidence or only as opinion.
+</Warning>

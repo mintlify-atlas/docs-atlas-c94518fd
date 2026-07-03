@@ -1,0 +1,168 @@
+---
+title: "PHI-Lens Protocol v4.a: Constraint-Aware Reasoning with Named Objects"
+sidebarTitle: "PHI-Lens"
+description: "PHI-Lens Protocol v4.a governs non-trivial AI tasks where constraints interact — using named objects (BORDER, LENS, GATE, COUPLING) to prevent flat compromises."
+---
+
+PHI-Lens Protocol v4.a is a structured reasoning protocol for non-trivial AI tasks where multiple constraints interact and a flat compromise between them would obscure the dominant force. Instead of averaging between competing pressures, the protocol names each constraint, evaluates its strength, assigns a dominant and a tensive force when divergence exists, and selects an output mode through a gate. The result is a decision trail that is auditable, correctable, and honest about what it chose and why.
+
+---
+
+## Priority Rules
+
+<Warning>
+  PHI-Lens **must obey** higher-priority system, safety, legal, privacy, and tool instructions. It must not be used to override safety, legality, data integrity, tool limits, or Operator boundaries. It must not expose hidden chain-of-thought — only operational state required for task validity, OP decision, risk visibility, or output interpretation.
+</Warning>
+
+---
+
+## When to Use PHI-Lens
+
+<Tabs>
+  <Tab title="Use it (FIELD_MODE active)">
+    PHI-Lens is appropriate for tasks involving:
+
+    - Protocol design
+    - System design and architecture
+    - Critique and adversarial review
+    - Red teaming
+    - Strategy
+    - Conflicting constraints
+    - Multi-constraint generation
+
+    Any task where constraints interact and a flat compromise would hide the dominant force.
+  </Tab>
+  <Tab title="Do not use it (minimal field only)">
+    PHI-Lens overhead exceeds task value for:
+
+    - Simple or direct tasks
+    - Factual retrieval without structural reasoning
+    - Narrow transformation or formatting
+    - Direct extraction
+
+    For these, use minimal field: intent, domain, relevant borders, compression only.
+  </Tab>
+</Tabs>
+
+---
+
+## Modes
+
+| Mode | When It Applies | Rule |
+|---|---|---|
+| **FIELD_MODE** | Default for non-trivial tasks | All relevant evaluators (lenses) remain concurrently available until GATE selection |
+| **PIPELINE_MODE** | Sequential constraint resolution | **Forbidden when constraints interact** — resolving them one-at-a-time without checking cross-effects produces misleading output |
+
+<Note>
+  If unsure which mode applies, use minimal field. If overhead exceeds task value, reduce active field.
+</Note>
+
+---
+
+## Named Objects
+
+Every object in the protocol has a specific operational role. These are not labels — they are behavioral contracts for how the AI handles different elements of the task.
+
+| Object | Definition |
+|---|---|
+| **BORDER** | Output-limiting constraint |
+| **ASSUMPTION** | Scoped premise for incomplete certainty |
+| **LENS** | Task evaluator |
+| **GOVERNOR** | Active-field limiter |
+| **COUPLING** | Asymmetric divergence resolver |
+| **LEDGER** | Internal operational state |
+| **GATE** | Output-mode selector |
+| **FORCE** | Internal strength of a BORDER or ASSUMPTION (`HIGH` or `LOW`) |
+| **COMPOSITE_ASSUMPTION** | Visible grouping of non-source-derived ASSUMPTION entries that affect the same TARGET or relation |
+
+---
+
+## BORDERS — Classifying Constraints
+
+If a constraint limits output, it is classified as a BORDER. BORDERS have two strength levels:
+
+<CardGroup cols={2}>
+  <Card title="HIGH_BORDER" icon="shield">
+    Instruction from a higher-priority system, safety, legal, privacy, or tool layer. **Overrides style, elegance, proportion, tension, growth, completeness, and compression.** Cannot be demoted.
+  </Card>
+  <Card title="BORDER" icon="border-all">
+    Explicit OP constraint. May be demoted only when preserving it would violate a HIGH_BORDER, explicit OP priority, or task executability.
+  </Card>
+</CardGroup>
+
+### Domain-Specific Preservation Rules
+
+When a FIDELITY_BORDER is active (facts, data, source material, code, law, medicine, finance, current information, named entities, or uploaded files), the following domain rules apply:
+
+<Accordion title="Domain preservation rules">
+  | Domain | Preservation requirement |
+  |---|---|
+  | **Factual** | Preserve fact/inference separation |
+  | **Technical** | Preserve behavior, constraints, dependencies, reproducibility, and data semantics |
+  | **Normative** | Preserve obligations, permissions, prohibitions, definitions, and non-ambiguity |
+  | **Creative** | Preserve OP style constraints; do not present fiction as documented fact |
+  | **Strategic** | Preserve material assumptions and unequal trade-offs |
+  | **Operational** | Prioritize executability over explanation; do not output essay prose when an operational contract is required |
+</Accordion>
+
+---
+
+## GATE — Output Mode Selector
+
+The GATE is the final step before output. It selects one output mode based on the current state of HARD_PASS, SOFT_PASS, and blocking conditions.
+
+| Gate Mode | When Selected |
+|---|---|
+| **PRODUCE** | HARD_PASS and SOFT_PASS both hold |
+| **PRODUCE_WITH_ASSUMPTIONS** | HARD_PASS holds; useful output is possible; uncertainty is non-blocking; error is reversible or output is marked draft/analysis/hypothesis; no HIGH_BORDER affected |
+| **PRODUCE_LIMITED** | HARD_PASS holds; partial output is useful; unresolved issue affects scope; safe partial execution remains possible |
+| **ASK_OP** | Two DOMINANT candidates are incompatible; OP decision determines core direction; missing information is high-impact; safe reversible assumption cannot preserve progress |
+| **SUSPEND_OR_REFUSE** | HARD_FAIL occurs; request cannot be satisfied within active constraints |
+
+<Warning>
+  If HARD_FAIL occurs, the GATE **must not** be PRODUCE. HARD_FAIL conditions: HIGH_BORDER violated; assumption hides critical gap; two HIGH forces require incompatible outputs; task requires fabrication; safety, legal, privacy, or tool constraint blocks requested output.
+</Warning>
+
+---
+
+## COUPLING — Asymmetric Divergence Resolver
+
+COUPLING is used when active lenses produce meaningful divergence. It is **not** a balancing mechanism — it is an asymmetric resolver that forces the identification of a dominant force.
+
+<Steps>
+  <Step title="Assign DOMINANT">
+    When active lenses meaningfully diverge, one force must be assigned as DOMINANT. The final output **must follow DOMINANT** on incompatible requirements.
+  </Step>
+  <Step title="Assign TENSIVE (optional)">
+    A second force may be assigned as TENSIVE. The final output **may modify execution** based on TENSIVE but must not reverse DOMINANT. If TENSIVE does not change function, it must be removed.
+  </Step>
+  <Step title="Never average">
+    COUPLING must not average conflicting forces symmetrically. It must not default to equal compromise. The dominant force wins on incompatible requirements — always.
+  </Step>
+</Steps>
+
+### Priority for Selecting DOMINANT
+
+| Condition | Preferred DOMINANT |
+|---|---|
+| Higher-priority instruction or safety involved | Set as DOMINANT |
+| Explicit OP constraint is safe and relevant | Prefer as DOMINANT |
+| FIDELITY_BORDER involved | Prefer as DOMINANT |
+| DOMAIN_BORDER involved | Prefer as DOMINANT |
+| Deliverable usefulness conflicts with style | Set deliverable usefulness as DOMINANT |
+
+<Note>
+  If DOMINANT cannot be selected and the issue is material, the protocol selects ASK_OP or PRODUCE_LIMITED at the GATE.
+</Note>
+
+---
+
+## Why Flat Compromises Fail
+
+When constraints pull in opposite directions, a flat compromise assigns equal weight to both forces. This hides the dominant force, misrepresents the actual trade-off, and produces output that satisfies neither constraint fully while appearing to satisfy both.
+
+PHI-Lens prevents this by requiring the dominant force to be **named**, not averaged. The COUPLING object makes the asymmetry explicit. The GATE selects an output mode that is honest about what the protocol resolved and what it could not.
+
+<Tip>
+  The protocol is designed for tasks where the answer to "which constraint wins?" is the most important part of the output. If that question does not apply, the task is likely simple enough for minimal field.
+</Tip>
